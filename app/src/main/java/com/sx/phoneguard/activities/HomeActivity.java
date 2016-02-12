@@ -10,7 +10,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initView();
+        initView();//初始化界面
     }
 
     private void initView() {
