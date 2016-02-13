@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.sx.phoneguard.activities.HomeActivity">
 
     <TextView
-        android:text="欢迎进入主界面"
+        android:textSize="30sp"
+        android:background="#5500ff00"
+        android:text="主界面"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"/>
+
+    <com.sx.phoneguard.view.FocusTextView
+        android:text="我是手机安全卫士！哈哈哈哈哈哈哈哈哈哈哈哈咋地咋地你想咋地"
+        android:singleLine="true"
+        android:ellipsize="marquee"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-</RelativeLayout>
+    <GridView
+        android:listSelector="@drawable/list_selector"
+        android:id="@+id/gv_home_jiugongge"
+        android:numColumns="3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></GridView>
+
+</LinearLayout>

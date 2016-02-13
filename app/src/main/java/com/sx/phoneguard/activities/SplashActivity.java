@@ -50,6 +50,7 @@ public class SplashActivity extends Activity {
     private RelativeLayout rl_root;
     private int versionCode;
     private ProgressBar pb_download;
+    private HttpURLConnection conn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class SplashActivity extends Activity {
         initAnimation();//初始化界面的动画效果
         startSubVersion();//访问网络监测版本信息
     }
+
 
     //访问网络检测版本信息是个耗时操作，所以要开一个子线程进行
     public void startSubVersion() {
@@ -70,7 +72,7 @@ public class SplashActivity extends Activity {
         }.start();
     }
 
-   Handler handler = new Handler() {
+   private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -134,7 +136,8 @@ public class SplashActivity extends Activity {
             HttpUtils httpUtils = new HttpUtils();
             //开始下载的时候显示进度条
             pb_download.setVisibility(View.VISIBLE);
-            httpUtils.download(url, "/sdcard/phoneguard.apk", true, true, new RequestCallBack<File>() {
+            System.out.println("啦啦啦啦啦啦啦啦啦啦啦啦啦");
+            httpUtils.download(url, "/sdcard/phoneguard.apk",new RequestCallBack<File>() {
                 /*
                 下载成功
                  */
@@ -210,7 +213,7 @@ public class SplashActivity extends Activity {
         try {
             //建立URL链接
             URL url = new URL(getResources().getString(R.string.url));
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
             //设置初始化参数
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(5000);

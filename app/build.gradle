@@ -5,11 +5,11 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.sx.phoneguard.activities"
+        applicationId "com.sx.phoneguard"
         minSdkVersion 10
         targetSdkVersion 23
         versionCode 2
-        versionName "宇宙版"
+        versionName "火星版"
     }
     buildTypes {
         release {
@@ -23,5 +23,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
-    compile files('libs/xUtils-2.6.8.jar')
+    compile files('lib/xUtils-2.6.14.jar')
 }
