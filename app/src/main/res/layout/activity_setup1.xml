@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sx.phoneguard.activities.Setup1Activity">
+
+    <TextView
+        style="@style/titleStyle"
+        android:text="1.欢迎使用手机防盗"
+        />
+
+    <TextView
+        style="@style/contentStyle"
+        android:text="您的手机防盗卫士:"
+        />
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        style="@style/contentStyle"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/star_big_on"/>
+
+        <TextView
+            style="@style/contentStyle"
+            android:text="SIM卡变更报警"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        style="@style/contentStyle"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/star_big_on"/>
+
+        <TextView
+            style="@style/contentStyle"
+            android:text="GPS追踪"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        style="@style/contentStyle"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/star_big_on"/>
+
+        <TextView
+            style="@style/contentStyle"
+            android:text="远程锁屏"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        style="@style/contentStyle"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/star_big_on"/>
+
+        <TextView
+            style="@style/contentStyle"
+            android:text="远程销毁数据"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:src="@android:drawable/presence_online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:src="@android:drawable/presence_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:src="@android:drawable/presence_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:src="@android:drawable/presence_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_centerInParent="true"
+            android:background="@drawable/setup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:text="下一步"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_selector"
+            android:drawableRight="@drawable/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</LinearLayout>

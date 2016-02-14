@@ -6,4 +6,5 @@ package com.sx.phoneguard.utils;
 public interface MyConstants {
     String SPNAME = "myconfig";
     String PASSWORD = "password";
+    String ISSET = "isset";
 }

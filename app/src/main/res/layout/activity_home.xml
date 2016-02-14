@@ -8,12 +8,9 @@
     tools:context="com.sx.phoneguard.activities.HomeActivity">
 
     <TextView
-        android:textSize="30sp"
-        android:background="@color/light_green"
+        style="@style/titleStyle"
         android:text="主界面"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"/>
+        />
 
     <com.sx.phoneguard.view.FocusTextView
         android:text="我是手机安全卫士！哈哈哈哈哈哈哈哈哈哈哈哈咋地咋地你想咋地"
