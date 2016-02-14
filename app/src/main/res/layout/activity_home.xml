@@ -9,7 +9,7 @@
 
     <TextView
         android:textSize="30sp"
-        android:background="#5500ff00"
+        android:background="@color/light_green"
         android:text="主界面"
         android:gravity="center"
         android:layout_width="match_parent"
