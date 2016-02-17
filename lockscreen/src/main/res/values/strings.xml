@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">一键锁屏</string>
+    <string name="sample_device_admin_description">设备管理器</string>
+    <string name="sample_device_admin">想要使用一键锁屏，必须激活</string>
+</resources>
