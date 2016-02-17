@@ -76,7 +76,7 @@
 
         <TextView
             style="@style/contentStyle"
-            android:text="SIM卡变更报警"
+            android:text="SIM卡变更报警:#*sim*#"
             />
     </LinearLayout>
 
@@ -92,7 +92,7 @@
 
         <TextView
             style="@style/contentStyle"
-            android:text="GPS追踪"
+            android:text="GPS追踪:#*GPS*#"
             />
     </LinearLayout>
 
@@ -108,7 +108,7 @@
 
         <TextView
             style="@style/contentStyle"
-            android:text="远程锁屏"
+            android:text="远程锁屏:#*lockscreen*#"
             />
     </LinearLayout>
 
@@ -124,7 +124,23 @@
 
         <TextView
             style="@style/contentStyle"
-            android:text="远程销毁数据"
+            android:text="远程销毁数据:#*wipedata*#"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        style="@style/contentStyle"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/star_big_on"/>
+
+        <TextView
+            style="@style/contentStyle"
+            android:text="音乐报警:#*music*#"
             />
     </LinearLayout>
 </LinearLayout>
