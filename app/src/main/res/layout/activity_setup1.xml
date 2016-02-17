@@ -117,6 +117,7 @@
             android:layout_height="wrap_content"/>
 
         <Button
+            android:onClick="next"
             android:text="下一步"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"

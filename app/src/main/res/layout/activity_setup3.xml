@@ -22,6 +22,8 @@
         />
     <EditText
         android:hint="请输入安全号码"
+        android:id="@+id/et_setup3_safenumber"
+        android:inputType="phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
@@ -71,6 +73,7 @@
 
         <Button
             android:text="下一步"
+            android:onClick="next"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/button_selector"
@@ -79,6 +82,7 @@
             android:layout_height="wrap_content"/>
 
         <Button
+            android:onClick="prev"
             android:text="上一步"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"

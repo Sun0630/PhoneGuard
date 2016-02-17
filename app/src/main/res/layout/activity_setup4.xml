@@ -13,11 +13,13 @@
         />
 
     <CheckBox
+        android:id="@+id/cb_setup4_islock"
         style="@style/contentStyle"
         android:text="打钩，开启防盗保护"
         />
 
     <TextView
+        android:id="@+id/tv_setup4_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -65,6 +67,7 @@
             android:background="@drawable/phone"/>
 
         <Button
+            android:onClick="next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -74,6 +77,7 @@
             android:text="设置完成"/>
 
         <Button
+            android:onClick="prev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
