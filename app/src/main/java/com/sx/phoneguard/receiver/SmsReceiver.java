@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.telephony.SmsMessage;
 
 import com.sx.phoneguard.R;
+import com.sx.phoneguard.service.LocationService;
 
 public class SmsReceiver extends BroadcastReceiver {
 
@@ -43,6 +44,9 @@ public class SmsReceiver extends BroadcastReceiver {
             } else if (smsBody.equals("#*GPS*#")) {//定位
                 //停止广播
                 System.out.println(smsBody);
+                //开启定位服务
+                Intent intent1 = new Intent(context, LocationService.class);
+                context.startService(intent1);
                 abortBroadcast();
             } else if (smsBody.equals("#*lockscreen*#")) {//锁屏
                 //停止广播
@@ -54,10 +58,6 @@ public class SmsReceiver extends BroadcastReceiver {
                 //停止广播
                 System.out.println(smsBody);
                 mDPM.wipeData(mDPM.WIPE_EXTERNAL_STORAGE);//清除sd卡
-                abortBroadcast();
-            } else if (smsBody.equals("#*sim*#")) {//sim变更
-                //停止广播
-                System.out.println(smsBody);
                 abortBroadcast();
             }
         }
