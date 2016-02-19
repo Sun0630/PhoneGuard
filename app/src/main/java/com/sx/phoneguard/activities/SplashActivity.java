@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.sx.phoneguard.R;
 import com.sx.phoneguard.domain.UrlData;
+import com.sx.phoneguard.utils.MyConstants;
 import com.sx.phoneguard.utils.ShowToast;
 import com.sx.phoneguard.utils.Stream2String;
 
@@ -51,14 +53,22 @@ public class SplashActivity extends Activity {
     private int versionCode;
     private ProgressBar pb_download;
     private HttpURLConnection conn;
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sp = getSharedPreferences(MyConstants.SPNAME,MODE_PRIVATE);
         initView();//初始化界面
         initData();//初始化界面组件的数据
         initAnimation();//初始化界面的动画效果
-        startSubVersion();//访问网络监测版本信息
+
+        //当设置中心的自动检查更新打钩的时候再检查更新版本。否则直接跳主界面
+        if(sp.getBoolean(MyConstants.ISCHECKVERSION,false)){
+            startSubVersion();//访问网络监测版本信息
+        }else {
+            loadMain();
+        }
     }
 
 
@@ -67,7 +77,7 @@ public class SplashActivity extends Activity {
         new Thread() {
             @Override
             public void run() {
-                checkVersion();
+                    checkVersion();
             }
         }.start();
     }

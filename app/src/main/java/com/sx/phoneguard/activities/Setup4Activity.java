@@ -1,11 +1,13 @@
 package com.sx.phoneguard.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.sx.phoneguard.R;
+import com.sx.phoneguard.service.StartSmsreceiverService;
 import com.sx.phoneguard.utils.MyConstants;
 import com.sx.phoneguard.utils.ShowToast;
 
@@ -29,8 +31,13 @@ public class Setup4Activity extends BaseSetupActivity {
                 //根据状态保存信息
                 sp.edit().putBoolean(MyConstants.ISLOCK,isChecked).commit();
                 if(isChecked){
+                    //当这个CheckBox被选中，通过服务动态开启广播接收者，开启防盗保护
+                    Intent service = new Intent(Setup4Activity.this, StartSmsreceiverService.class);
+                    startService(service);
                     tv_start.setText("防盗保护开启");
                 }else {
+                    Intent service = new Intent(Setup4Activity.this, StartSmsreceiverService.class);
+                    stopService(service);
                     tv_start.setText("防盗保护已关闭");
                 }
 
@@ -62,8 +69,9 @@ public class Setup4Activity extends BaseSetupActivity {
     @Override
     public void next() {
         if(!sp.getBoolean(MyConstants.ISLOCK,false)){
-            ShowToast.show(Setup4Activity.this,"请确认开启防盗保护");
-            return;
+            ShowToast.show(Setup4Activity.this,"没有开启防盗保护，您的手机可能会遭遇危险！");
+        }else {
+            ShowToast.show(Setup4Activity.this,"防盗保护已开启，时刻保护您的手机");
         }
         sp.edit().putBoolean(MyConstants.ISSET,true).commit();
         startAndFinishActivity(LostFindActivity.class);

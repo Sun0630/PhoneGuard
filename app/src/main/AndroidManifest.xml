@@ -42,6 +42,7 @@
         <activity android:name=".activities.BaseSetupActivity">
         </activity>
 
+        <!--
         <receiver
             android:name=".receiver.SmsReceiver"
             android:enabled="true"
@@ -50,6 +51,7 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
+        -->
         <receiver
             android:name=".receiver.MyDeviceAdminReceiver"
             android:description="@string/sample_device_admin_description"
@@ -81,6 +83,14 @@
 
         <activity android:name=".activities.FriendsActivity">
         </activity>
+        <activity android:name=".activities.SettingActivity">
+        </activity>
+
+        <service
+            android:name=".service.StartSmsreceiverService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

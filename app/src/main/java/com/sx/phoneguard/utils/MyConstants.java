@@ -10,4 +10,5 @@ public interface MyConstants {
     String SIM = "sim";
     String SAFEPHONE = "safephone";
     String ISLOCK = "islock";//防盗是否开启
+    String ISCHECKVERSION = "ischeckversion";
 }

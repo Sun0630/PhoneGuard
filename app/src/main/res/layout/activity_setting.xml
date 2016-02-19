@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sx="http://schemas.android.com/apk/com.sx.phoneguard"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sx.phoneguard.activities.SettingActivity">
+
+    <TextView
+        style="@style/titleStyle"
+        android:text="设置中心"
+        />
+
+    <com.sx.phoneguard.view.SettingView
+        android:id="@+id/sv_setting_update"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        sx:content="自动更新已开启,自动更新已关闭"
+        sx:settingTitle="自动更新设置"
+        >
+    </com.sx.phoneguard.view.SettingView>
+
+    <com.sx.phoneguard.view.SettingView
+        android:id="@+id/sv_setting_black"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        sx:content="黑名单已开启,黑名单已关闭"
+        sx:settingTitle="黑名单设置"
+        >
+    </com.sx.phoneguard.view.SettingView>
+</LinearLayout>

@@ -55,5 +55,10 @@ public class LostFindActivity extends AppCompatActivity {
         //拿到两个组件
         tv_safenumber = (TextView) findViewById(R.id.tv_lostfind_safenumber);
         iv_lock = (ImageView) findViewById(R.id.iv_lostfind_lock);
+        if(sp.getBoolean(MyConstants.ISLOCK,false)){
+            iv_lock.setImageResource(R.drawable.lock);
+        }else {
+            iv_lock.setImageResource(R.drawable.unlock);
+        }
     }
 }
