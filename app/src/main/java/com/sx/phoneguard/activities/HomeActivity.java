@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sp = getSharedPreferences(MyConstants.SPNAME,MODE_PRIVATE);
         initView();//初始化界面
         initData();//初始化数据
         initEvent();//所有组件的初始化事件
@@ -43,7 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     private boolean isSetPass(){
         boolean res = false;
         //拿到SharePreference中保存的密码
-        sp = getSharedPreferences(MyConstants.SPNAME,MODE_PRIVATE);
+
         String password = sp.getString(MyConstants.PASSWORD, "");
         if (!TextUtils.isEmpty(password)) {//密码不为空
             res = true;
@@ -150,6 +151,12 @@ public class HomeActivity extends AppCompatActivity {
         builder.setView(view);//在对话框中填充进去一个view对象
         dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        adapter.notifyDataSetChanged();
+        super.onResume();
     }
 
     private void initEvent() {
@@ -259,6 +266,13 @@ public class HomeActivity extends AppCompatActivity {
             //为这两个组件设置显示内容
             holder.iv_icon.setBackgroundResource(icons[position]);
             holder.tv_name.setText(names[position]);
+            if (position==0){
+                String newName = sp.getString(MyConstants.NEWNAME, "");
+                if (!TextUtils.isEmpty(newName)){
+                    holder.tv_name.setText(newName);
+                }
+            }
+
             return convertView;
         }
 

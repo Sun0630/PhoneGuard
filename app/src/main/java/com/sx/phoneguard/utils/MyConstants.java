@@ -11,4 +11,5 @@ public interface MyConstants {
     String SAFEPHONE = "safephone";
     String ISLOCK = "islock";//防盗是否开启
     String ISCHECKVERSION = "ischeckversion";
+    String NEWNAME="newname";//修改新名称
 }

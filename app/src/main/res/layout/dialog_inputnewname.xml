@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="300dp"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@color/light_green"
+        android:gravity="center"
+        android:text="新名称"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <EditText
+        android:id="@+id/et_dialog_newname"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="请输入新名称"
+        android:textColor="#000000"/>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/bt_dialog_enter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_selector"
+            android:text="确认"
+            android:textColor="#000000"/>
+
+        <Button
+            android:id="@+id/bt_dialog_cancle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_selector"
+            android:text="取消"
+            android:textColor="#000000"/>
+    </LinearLayout>
+
+</LinearLayout>
