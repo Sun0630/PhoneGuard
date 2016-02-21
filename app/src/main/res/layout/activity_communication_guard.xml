@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sx.phoneguard.activities.CommunicationGuardActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/titleStyle"
+            android:text="通讯卫士"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:onClick="addData"
+            android:layout_centerVertical="true"
+            android:text="添加"/>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--等待加载-->
+        <LinearLayout
+            android:id="@+id/ll_blacklist_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="正在玩命加载..."/>
+        </LinearLayout>
+
+        <!--数据显示-->
+        <ListView
+            android:id="@+id/lv_blacklist_datas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fastScrollEnabled="true"
+            android:visibility="gone">
+
+        </ListView>
+
+        <!--没有数据-->
+        <TextView
+            android:id="@+id/tv_blacklist_nodata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="暂时没有数据哟亲~"
+            android:textSize="20sp"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+
+</LinearLayout>

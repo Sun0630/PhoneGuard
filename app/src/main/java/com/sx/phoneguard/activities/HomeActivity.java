@@ -181,10 +181,15 @@ public class HomeActivity extends AppCompatActivity {
                            showSetPassDialog();
                        }
                        break;
+                   case 1://通讯卫士
+                       Intent intent1 = new Intent(HomeActivity.this,CommunicationGuardActivity.class);
+                       startActivity(intent1);
+                        break;
                    case 8://设置中心
                        Intent intent = new Intent(HomeActivity.this,SettingActivity.class);
                        startActivity(intent);
                        break;
+
                    default:
                        break;
                }

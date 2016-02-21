@@ -13,14 +13,17 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public ApplicationTest() {
         super(Application.class);
     }
-    
-    public void  testAdd(){
-        BlackNumberDao dao = new BlackNumberDao(getContext());
-        BlackNumberData data = new BlackNumberData("110",BlackNumberData.PHONE);
-        dao.add(data);
+
+    public void testAdd() {
+        for (int i = 0; i < 200; i++) {
+            BlackNumberDao dao = new BlackNumberDao(getContext());
+            BlackNumberData data = new BlackNumberData("110"+i, BlackNumberData.PHONE);
+            dao.add(data);
+        }
+
     }
 
-    public void testFindAll(){
+    public void testFindAll() {
         BlackNumberDao dao = new BlackNumberDao(getContext());
         System.out.println(dao.findAll());
 

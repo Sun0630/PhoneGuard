@@ -91,6 +91,11 @@
             android:enabled="true"
             android:exported="true">
         </service>
+
+        <activity android:name=".activities.CommunicationGuardActivity">
+        </activity>
+        <activity android:name=".activities.CommunicationGuardActivityPage">
+        </activity>
     </application>
 
 </manifest>

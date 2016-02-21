@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class BlackNameDB extends SQLiteOpenHelper {
 
     public BlackNameDB(Context context) {
-        super(context, "blackname.db", null, 1);
+        super(context, "blackname.db", null, 3);
     }
 
 

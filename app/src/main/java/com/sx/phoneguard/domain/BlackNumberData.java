@@ -10,6 +10,7 @@ public class BlackNumberData {
     public static final String TABLENAME = "blackname_tb";
     public static final String BLACKNUMBER = "blacknumber";
     public static final String MODE = "mode";
+    public static final int PERPAGE = 20;
 
 
     /**
