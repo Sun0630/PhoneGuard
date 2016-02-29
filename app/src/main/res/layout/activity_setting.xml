@@ -30,4 +30,22 @@
         sx:settingTitle="黑名单设置"
         >
     </com.sx.phoneguard.view.SettingView>
+
+    <com.sx.phoneguard.view.SettingView
+        android:id="@+id/sv_setting_black_bootcomplete"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        sx:content="黑名单开机启动已开启,黑名单开机启动已关闭"
+        sx:settingTitle="开机自动启动黑名单设置"
+        >
+    </com.sx.phoneguard.view.SettingView>
+
+    <com.sx.phoneguard.view.SettingView
+        android:id="@+id/sv_setting_phonecall_location"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        sx:content="来电显示归属地已开启,来电显示归属地已关闭"
+        sx:settingTitle="来电显示归属地"
+        >
+    </com.sx.phoneguard.view.SettingView>
 </LinearLayout>

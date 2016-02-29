@@ -26,9 +26,9 @@ public abstract class BaseSetupActivity extends Activity {
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 //e1：起始的滑动点   e2:滑动的过程中记录当前点的坐标，   velocityX：速度
                 if (Math.abs(velocityX) > 100) {
-                    if (e1.getX() - e2.getX() > 200) {//从左往右滑动
+                    if (e1.getX() - e2.getX() > 100) {//从左往右滑动
                         next(null);
-                    } else if (e1.getX() - e2.getX() < -200){//从右往左滑动
+                    } else if (e1.getX() - e2.getX() < -100){//从右往左滑动
                         prev(null);
                     }
                 }else {
@@ -39,6 +39,19 @@ public abstract class BaseSetupActivity extends Activity {
         });
     }
 
+    /**
+     * 手势和触摸事件绑定
+     * @param event
+     * 事件
+     * @return
+     * boolean
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gd.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
     public abstract void prev();
 
     public abstract void next();
@@ -47,13 +60,13 @@ public abstract class BaseSetupActivity extends Activity {
 
         prev();
         //位置动画效果的切换
-        //        overridePendingTransition(R.drawable.prev_out,R.drawable.prev_in);
+        overridePendingTransition(R.anim.prev_out,R.anim.prev_in);
     }
 
     public void next(View view) {
         //动画效果
         next();
-        //       overridePendingTransition(R.drawable.next_out,R.drawable.next_in);
+        overridePendingTransition(R.anim.next_out,R.anim.next_in);
     }
 
     public void startAndFinishActivity(Class type) {

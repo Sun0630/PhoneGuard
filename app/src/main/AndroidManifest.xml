@@ -13,6 +13,9 @@
     <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -96,6 +99,27 @@
         </activity>
         <activity android:name=".activities.CommunicationGuardActivityPage">
         </activity>
+        <activity android:name=".activities.SmsActivity">
+        </activity>
+        <activity android:name=".activities.TelActivity">
+        </activity>
+
+        <service
+            android:name=".service.BlackService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+
+        <activity android:name=".activities.AToolsActivity">
+        </activity>
+        <activity android:name=".activities.PhoneLocationActivity">
+        </activity>
+
+        <service
+            android:name=".service.PhoneLocationService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

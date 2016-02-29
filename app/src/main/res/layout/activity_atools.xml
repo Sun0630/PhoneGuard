@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sx.phoneguard.activities.Setup1Activity">
+
+    <TextView
+        style="@style/titleStyle"
+        android:text="高级工具"
+        />
+
+    <LinearLayout
+        style="@style/contentStyle"
+        android:background="@drawable/list_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:onClick="appLock"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/star_big_on"/>
+
+        <TextView
+            style="@style/contentStyle"
+            android:text="程序锁"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/contentStyle"
+        android:background="@drawable/list_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:onClick="phoneLocation"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/star_big_on"/>
+
+        <TextView
+            style="@style/contentStyle"
+            android:text="手机归属地查询"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/contentStyle"
+        android:background="@drawable/list_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:onClick="smsBackup"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/star_big_on"/>
+
+        <TextView
+            style="@style/contentStyle"
+            android:text="短信备份"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/contentStyle"
+        android:background="@drawable/list_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:onClick="smsRecovery"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/star_big_on"/>
+
+        <TextView
+            style="@style/contentStyle"
+            android:text="短信还原"
+            />
+    </LinearLayout>
+
+</LinearLayout>

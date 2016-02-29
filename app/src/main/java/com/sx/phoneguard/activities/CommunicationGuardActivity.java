@@ -2,13 +2,19 @@ package com.sx.phoneguard.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -17,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.sx.phoneguard.R;
@@ -38,12 +45,16 @@ public class CommunicationGuardActivity extends AppCompatActivity {
     private List<BlackNumberData> datas = new ArrayList<>();
     private MyAdapter adapter;
     private AlertDialog dialog;
+    private PopupWindow pw;
+    private View popupView;
+    private ScaleAnimation sa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initView();//初始化界面
+        initPopupView();//初始化窗体功能列表
         initData();//初始化数据
         initEvent();//初始化事件
     }
@@ -156,11 +167,86 @@ public class CommunicationGuardActivity extends AppCompatActivity {
     }
 
     /**
-     * 添加
+     * 添加按钮事件
      *
-     * @param view
+     * @param view 按钮事件
      */
     public void addData(View view) {
+        //弹出窗体，然后让用户选择从哪里添加黑名单联系人，可以从通话记录，短信记录中选取
+        if (pw != null && pw.isShowing()) {
+            pw.dismiss();
+        } else {
+            pw.showAtLocation(view, Gravity.RIGHT | Gravity.TOP, 20, 110);
+            popupView.startAnimation(sa);
+        }
+
+    }
+
+    private void initPopupView() {
+        popupView = View.inflate(getApplicationContext(), R.layout.popupview, null);
+        //拿到四个TextView为其添加点击事件
+        TextView tv_contacts = (TextView) popupView.findViewById(R.id.tv_contacts); //从联系人
+        TextView tv_diy = (TextView) popupView.findViewById(R.id.tv_diy); //手动添加
+        TextView tv_sms = (TextView) popupView.findViewById(R.id.tv_sms); //短信列表添加
+        TextView tv_remember = (TextView) popupView.findViewById(R.id.tv_remember);//通话记录添加
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.tv_contacts://从联系人导入
+                        Intent contacts = new Intent(CommunicationGuardActivity.this,FriendsActivity.class);
+                        startActivityForResult(contacts,0);
+                        break;
+                    case R.id.tv_diy://手动添加
+                        addData("");
+                        break;
+                    case R.id.tv_sms://从短信列表导入
+                        //取到短信记录的数据
+                        //界面显示
+                        Intent sms = new Intent(CommunicationGuardActivity.this,SmsActivity.class);
+                        startActivityForResult(sms,0);
+                        break;
+                    case R.id.tv_remember://从通话记录导入
+                        //取到通话记录的数据
+                        //界面显示
+                        Intent tel = new Intent(CommunicationGuardActivity.this,TelActivity.class);
+                        startActivityForResult(tel,0);
+                        break;
+                }
+                //点击完对话框都得消失
+                pw.dismiss();
+            }
+        };
+
+        tv_contacts.setOnClickListener(listener);
+        tv_diy.setOnClickListener(listener);
+        tv_sms.setOnClickListener(listener);
+        tv_remember.setOnClickListener(listener);
+
+
+        //弹出窗体功能列表
+        pw = new PopupWindow(popupView, -2, -2);//设置这个窗体大小为包裹内容
+        //窗体必须有背景才能显示动画效果
+        pw.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//把背景设置成透明的
+        sa = new ScaleAnimation(1, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
+        sa.setDuration(200);
+        popupView.setAnimation(sa);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data != null){
+            String phonenumber = data.getStringExtra("phonenumber");
+            addData(phonenumber);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * 手动添加数据
+     */
+    public void addData(String phonenumber) {
         //弹出一个添加信息的对话框
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //填充一个布局组件
@@ -174,6 +260,8 @@ public class CommunicationGuardActivity extends AppCompatActivity {
         /*
         确定的事件
          */
+
+        et_phoneNumber.setText(phonenumber);
         bt_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,7 +357,7 @@ public class CommunicationGuardActivity extends AppCompatActivity {
                     //弹出对话框提示
                     AlertDialog.Builder builder = new AlertDialog.Builder(CommunicationGuardActivity.this);
                     builder.setTitle("友情提示");
-                    builder.setMessage("您真的要删除" + data.getBlackNumber()+"吗?");
+                    builder.setMessage("您真的要删除" + data.getBlackNumber() + "吗?");
                     builder.setPositiveButton("真的", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -277,7 +365,7 @@ public class CommunicationGuardActivity extends AppCompatActivity {
                         }
                     });
 
-                    builder.setNegativeButton("假的",null);
+                    builder.setNegativeButton("假的", null);
 
                     builder.show();
                 }
@@ -311,5 +399,15 @@ public class CommunicationGuardActivity extends AppCompatActivity {
         TextView tv_black_number;
         TextView tv_black_mode;
         ImageView iv_black_delete;
+    }
+
+    @Override
+    protected void onDestroy() {
+        //销毁popupWindow
+        //当popup正在显示的时候，如果用户点击了后退键，会造成内存问题。所以需要释放
+        if (pw != null && pw.isShowing()) {
+            pw.dismiss();
+        }
+        super.onDestroy();
     }
 }

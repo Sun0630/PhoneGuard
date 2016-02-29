@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,6 +26,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.sx.phoneguard.R;
 import com.sx.phoneguard.domain.UrlData;
+import com.sx.phoneguard.utils.CopyFile;
 import com.sx.phoneguard.utils.MyConstants;
 import com.sx.phoneguard.utils.ShowToast;
 import com.sx.phoneguard.utils.Stream2String;
@@ -33,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -58,16 +61,51 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sp = getSharedPreferences(MyConstants.SPNAME,MODE_PRIVATE);
+        sp = getSharedPreferences(MyConstants.SPNAME, MODE_PRIVATE);
         initView();//初始化界面
         initData();//初始化界面组件的数据
         initAnimation();//初始化界面的动画效果
+        //当数据库文件存在的时候就不用再次拷贝了
+        if(!isExists("address.db")){
+            copyThread("address.db");
+        }
+
 
         //当设置中心的自动检查更新打钩的时候再检查更新版本。否则直接跳主界面
-        if(sp.getBoolean(MyConstants.ISCHECKVERSION,false)){
+        if (sp.getBoolean(MyConstants.ISCHECKVERSION, false)) {
             startSubVersion();//访问网络监测版本信息
-        }else {
+        } else {
             loadMain();
+        }
+    }
+
+        private boolean isExists(String dbName){
+            boolean res = false;
+            File file = new File("data/data/com.sx.phoneguard/files/" + dbName);
+            res = file.exists();
+            return res;
+        }
+
+    private void copyThread(final String dbName) {
+        //拷贝数据库是个耗时的操作，所以需要封装子线程
+        new Thread(){
+            @Override
+            public void run() {
+                copyDB(dbName);
+            }
+        }.start();
+    }
+
+    private void copyDB(String dbname) {
+        //读取assets目录下的数据库资源，拷贝到工程数据库目录中，因为assets里面的资源不能引用
+        AssetManager assets = getAssets();
+        try {
+            InputStream is = assets.open(dbname);
+            //需要把这个数据库文件拷贝到data/data/com.sx.phoneguard/databases/xx.db
+            FileOutputStream os = openFileOutput(dbname, MODE_PRIVATE);
+            CopyFile.copy(is, os);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -77,12 +115,12 @@ public class SplashActivity extends Activity {
         new Thread() {
             @Override
             public void run() {
-                    checkVersion();
+                checkVersion();
             }
         }.start();
     }
 
-   private Handler handler = new Handler() {
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -125,7 +163,7 @@ public class SplashActivity extends Activity {
 
                                 }
                             });
-                        builder.show();
+                    builder.show();
 
                     break;
                 case LOADMAIN:
@@ -147,7 +185,7 @@ public class SplashActivity extends Activity {
             //开始下载的时候显示进度条
             pb_download.setVisibility(View.VISIBLE);
             System.out.println("啦啦啦啦啦啦啦啦啦啦啦啦啦");
-            httpUtils.download(url, "/sdcard/phoneguard.apk",new RequestCallBack<File>() {
+            httpUtils.download(url, "/sdcard/phoneguard.apk", new RequestCallBack<File>() {
                 /*
                 下载成功
                  */
@@ -171,11 +209,11 @@ public class SplashActivity extends Activity {
                     Intent intent = new Intent();
                     intent.setAction("android.intent.action.VIEW");
                     intent.addCategory("android.intent.category.DEFAULT");
-                    intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory(),"phoneguard.apk")),
+                    intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "phoneguard.apk")),
                             "application/vnd.android.package-archive");
                     //开启PackageInstallerActivity
                     //如果在这个界面用户不点击安装，而是选择了不安装，会返回来一个消息。
-                    startActivityForResult(intent,0);
+                    startActivityForResult(intent, 0);
                 }
 
 
@@ -202,6 +240,7 @@ public class SplashActivity extends Activity {
 
     /**
      * 当用户在安装界面的时候选择了不安装，返回数据，直接跳转到主界面
+     *
      * @param requestCode
      * @param resultCode
      * @param data

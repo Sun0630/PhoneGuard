@@ -62,6 +62,30 @@ public class BlackNumberDao {
     }
 
     /**
+     *
+     * @param number
+     * 黑名单号码
+     * @return
+     * 返回的是拦截模式
+     *  0，不拦截
+     *  1，短信拦截
+     *  2，电话拦截
+     *  3，全都拦截
+     */
+    public int getMode(String number){
+       int type = 0;
+        SQLiteDatabase db = mydb.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select "+BlackNumberData.MODE+" from " + BlackNumberData.TABLENAME + " where "
+                + BlackNumberData.BLACKNUMBER + " = ?", new String[]{number});
+        if (cursor.moveToNext()){
+            type = cursor.getInt(0);
+            System.out.println(type);
+        }
+        cursor.close();
+        return type;
+    }
+
+    /**
      * 把页码传递过来，然后取到当前页的数据
      * @param pageIndex
      *          第几页

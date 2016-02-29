@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<transition xmlns:android="http://schemas.android.com/apk/res/android"
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
             android:fromXDelta="-100%p"
             android:fromYDelta="0"
             android:toXDelta="0"
@@ -7,4 +7,4 @@
             android:duration="500"
     >
 
-</transition>
+</translate>
