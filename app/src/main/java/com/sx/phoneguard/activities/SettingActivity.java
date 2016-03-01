@@ -39,10 +39,16 @@ public class SettingActivity extends AppCompatActivity {
         }else {
             sv_update.setChecked(false);
         }
-        if (ServiceUtils.isRun(SettingActivity.this, BlackService.class)){
+        if (ServiceUtils.isRun(SettingActivity.this, "com.sx.phoneguard.service.BlackService")){
             sv_black.setChecked(true);
         }else {
             sv_black.setChecked(false);
+        }
+
+        if (ServiceUtils.isRun(SettingActivity.this, "com.sx.phoneguard.service.PhoneLocationService")){
+            sv_phonecall_location.setChecked(true);
+        }else {
+            sv_phonecall_location.setChecked(false);
         }
         //设置初始化状态
         sv_black_boot.setChecked(sp.getBoolean(MyConstants.BOOTBLACK,false));
@@ -76,7 +82,7 @@ public class SettingActivity extends AppCompatActivity {
                 sv_black.setChecked(!sv_black.getChecked());
                 //启动或关闭黑名单拦截服务
                 //1,判断服务是否启动
-                if (ServiceUtils.isRun(SettingActivity.this, BlackService.class)) {
+                if (ServiceUtils.isRun(SettingActivity.this, "com.sx.phoneguard.service.BlackService")) {
                     //服务已经启动，就关闭服务
                     Intent intent = new Intent(SettingActivity.this, BlackService.class);
                     stopService(intent);
@@ -108,7 +114,7 @@ public class SettingActivity extends AppCompatActivity {
                 sv_phonecall_location.setChecked(!sv_phonecall_location.getChecked());
                 //启动或关闭来电显示归属地
                 //1,判断服务是否启动
-                if (ServiceUtils.isRun(SettingActivity.this, PhoneLocationService.class)) {
+                if (ServiceUtils.isRun(SettingActivity.this, "com.sx.phoneguard.service.PhoneLocationService")) {
                     //服务已经启动，就关闭服务
                     Intent intent = new Intent(SettingActivity.this, PhoneLocationService.class);
                     stopService(intent);

@@ -15,18 +15,18 @@ public class ServiceUtils {
      *
      * @param context
      *      上下文
-     * @param serviceType
+     * @param serviceClassName
      *      service的类名
      * @return
      *      是否
      */
 
-    public static boolean isRun(Context context,Class serviceType){
+    public static boolean isRun(Context context,String serviceClassName){
         boolean res = false;
         ActivityManager am = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
         List<RunningServiceInfo> runningServices = am.getRunningServices(50);
         for (RunningServiceInfo info:runningServices){
-            if (info.service.getClass() == serviceType){
+            if (info.service.getClassName().equals(serviceClassName)){
                 res = true;
                 break;
             }
