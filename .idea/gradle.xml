@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/gpsdemo" />
             <option value="$PROJECT_DIR$/lockscreen" />
+            <option value="$PROJECT_DIR$/rocket" />
           </set>
         </option>
       </GradleProjectSettings>

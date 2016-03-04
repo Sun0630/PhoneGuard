@@ -48,7 +48,7 @@ public class PhoneLocationService extends Service {
             super.onCallStateChanged(state, incomingNumber);
         }
     };
-    ;
+
     private OutCallReceiver outCallReceiver;
     private WindowManager wm;
     private View view;
@@ -68,9 +68,15 @@ public class PhoneLocationService extends Service {
 
     /**
      * 初始化吐司
+     * 风格样式
+     * "金属灰","苹果绿","卫士蓝","活力橙","半透明"
      */
+    private int[] styles = new int[]{R.drawable.call_locate_gray, R.drawable.call_locate_green,
+            R.drawable.call_locate_blue, R.drawable.call_locate_orange, R.drawable.call_locate_white};
+
     public void initToast() {
         view = View.inflate(getApplicationContext(), R.layout.sys_toast, null);
+        setStyle();
         tv_location = (TextView) view.findViewById(R.id.title);
 
         params = new WindowManager.LayoutParams();
@@ -89,6 +95,11 @@ public class PhoneLocationService extends Service {
 
     }
 
+    private void setStyle() {
+        int position = sp.getInt(MyConstants.STYLE, 0);
+        view.setBackgroundResource(styles[position]);
+    }
+
     /**
      * 自定义吐司的显示
      *
@@ -96,6 +107,7 @@ public class PhoneLocationService extends Service {
      */
     public void show(String location) {
         tv_location.setText(location);
+        setStyle();//设置背景
         wm.addView(view, params);
     }
 

@@ -69,6 +69,15 @@
             />
     </LinearLayout>
 
+
+    <ProgressBar
+        android:id="@+id/pb_smsbake_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+
     <LinearLayout
         style="@style/contentStyle"
         android:background="@drawable/list_selector"
@@ -87,5 +96,6 @@
             android:text="短信还原"
             />
     </LinearLayout>
+
 
 </LinearLayout>
