@@ -1,5 +1,7 @@
 package com.sx.phoneguard.utils;
 
+import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -7,11 +9,17 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Xml;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * 短信工具类
@@ -31,6 +39,48 @@ public class SmsUtils {
         void setMax(int max);
     }
 
+    /**
+     * 短信还原原理：
+     *      把之前备份的短信的xml文件解析之后插入到短信数据库中即可
+     * @param context
+     * 上下文
+     * @param pd
+     * 回调接口
+     */
+    public static void smsResume(Context context,ProgressCallBack pd){
+        //使用dom4j来解析xml文件
+        Uri uri = Uri.parse("content://sms");
+        SAXReader reader = new SAXReader();
+        try {
+            //读取xml文件
+            Document doc = reader.read(new File(Environment.getExternalStorageDirectory(), "sms.xml"));
+            //得到xml文件的根节点
+            Element root = doc.getRootElement();
+            List sms = root.elements("sms");
+            //拿到元素的迭代器
+            Iterator<Element> iterator = sms.iterator();
+            pd.setMax(sms.size());
+            int number = 0;
+            //开始迭代，读取xml文件中的内容
+            while (iterator.hasNext()) {
+                SystemClock.sleep(100);
+                Element smsEle = iterator.next();
+                //读取出数据插入到短信数据库中,恢复短信
+                ContentValues values = new ContentValues();
+                values.put("address",smsEle.elementText("address"));
+                values.put("type",smsEle.elementText("type"));
+                values.put("date",smsEle.elementText("date"));
+                values.put("body", smsEle.elementText("body"));
+
+
+                Uri insert = context.getContentResolver().insert(uri, values);
+                pd.setProgress(++number);
+            }
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 备份短信
@@ -38,7 +88,7 @@ public class SmsUtils {
      * @param context 上下文
      * @param pd
      */
-    /*public static void BakeUpSms(Context context, ProgressDialog pd) {
+    public static void BakeUpSms(Context context, ProgressDialog pd) {
         Uri uri = Uri.parse("content://sms");
         Cursor cursor = context.getContentResolver().query(uri, new String[]{"address", "type", "date", "body"}, null, null, null);
         //拿到xml序列化对象
@@ -100,9 +150,7 @@ public class SmsUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-    }*/
+    }
 
     public static void BakeUpSms(Context context, ProgressCallBack pd) {
         Uri uri = Uri.parse("content://sms");

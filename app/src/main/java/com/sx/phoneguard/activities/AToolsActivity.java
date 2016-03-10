@@ -13,15 +13,15 @@ import com.sx.phoneguard.utils.SmsUtils;
 public class AToolsActivity extends AppCompatActivity {
 
     private ProgressBar pb;
+    private ProgressBar pb_resume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atools);
         pb = (ProgressBar) findViewById(R.id.pb_smsbake_progress);
+        pb_resume = (ProgressBar) findViewById(R.id.pb_smsresume_progress);
     }
-
-
 
 
     /**
@@ -32,6 +32,40 @@ public class AToolsActivity extends AppCompatActivity {
     public void phoneLocation(View view) {
         Intent intent = new Intent(AToolsActivity.this, PhoneLocationActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * 短信还原
+     *
+     * @param view
+     */
+    public void smsRecovery(View view) {
+        pb_resume.setVisibility(View.VISIBLE);
+        final SmsUtils.ProgressCallBack callBack = new SmsUtils.ProgressCallBack() {
+            @Override
+            public void setProgress(int current) {
+                pb_resume.setProgress(current);
+            }
+
+            @Override
+            public void setMax(int max) {
+                pb_resume.setMax(max);
+            }
+        };
+        new Thread() {
+            @Override
+            public void run() {
+                SmsUtils.smsResume(getApplicationContext(), callBack);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pb_resume.setVisibility(View.GONE);
+                    }
+                });
+
+                super.run();
+            }
+        }.start();
     }
 
     /**
@@ -85,7 +119,7 @@ public class AToolsActivity extends AppCompatActivity {
         };
 
         pd.show();
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 SmsUtils.BakeUpSms(getApplicationContext(), callBack);

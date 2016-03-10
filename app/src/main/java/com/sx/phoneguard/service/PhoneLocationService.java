@@ -38,11 +38,12 @@ public class PhoneLocationService extends Service {
                     break;
                 case TelephonyManager.CALL_STATE_IDLE://空闲 ---电话管理器只要已注册这个事件就执行了。
                     //只过滤第一次
-                    if (!isFirst) {
+                    dismissToast();
+                   /* if (!isFirst) {
                         dismissToast();
                     } else {
                         isFirst = false;
-                    }
+                    }*/
                     break;
             }
             super.onCallStateChanged(state, incomingNumber);
@@ -106,6 +107,7 @@ public class PhoneLocationService extends Service {
      * @param location 电话归属地
      */
     public void show(String location) {
+        initToast();
         tv_location.setText(location);
         setStyle();//设置背景
         wm.addView(view, params);
@@ -117,6 +119,7 @@ public class PhoneLocationService extends Service {
     public void dismissToast() {
         if (view != null) {
             wm.removeView(view);
+            view=null;
         }
     }
 
@@ -191,8 +194,7 @@ public class PhoneLocationService extends Service {
     public void onCreate() {
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         sp = getSharedPreferences(MyConstants.SPNAME, MODE_PRIVATE);
-        //初始化吐司的组件
-        initToast();
+
         tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         dao = new PhoneLocationDao();
         //初始化电话的监听

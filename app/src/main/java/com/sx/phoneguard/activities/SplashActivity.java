@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -66,6 +67,8 @@ public class SplashActivity extends Activity {
         initData();//初始化界面组件的数据
         initAnimation();//初始化界面的动画效果
         //当数据库文件存在的时候就不用再次拷贝了
+        //创建桌面快捷方式
+        createshortcut();
         if(!isExists("address.db")){
             copyThread("address.db");
         }
@@ -78,7 +81,30 @@ public class SplashActivity extends Activity {
             loadMain();
         }
     }
+    private void createshortcut() {
+        Intent intent = new Intent();
+        /**
+         * 发送一个广播就可以创建快捷方式
+         * 创建快捷方式的三要素
+         *  1,长什么样   图标
+         *  2,做什么事
+         *  3,叫什么名
+         */
 
+        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        //长什么样
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+        //叫什么名
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "361手机卫士");
+        //做什么事
+        Intent doWhat = new Intent();
+        doWhat.setAction("com.sx.home");
+        //设置只创建一个快捷方式
+        intent.putExtra("duplicate",false);
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT,doWhat);
+        sendBroadcast(intent);
+
+    }
         private boolean isExists(String dbName){
             boolean res = false;
             File file = new File("data/data/com.sx.phoneguard/files/" + dbName);

@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/gpsdemo/gpsdemo.iml" filepath="$PROJECT_DIR$/gpsdemo/gpsdemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/lockscreen/lockscreen.iml" filepath="$PROJECT_DIR$/lockscreen/lockscreen.iml" />
       <module fileurl="file://$PROJECT_DIR$/rocket/rocket.iml" filepath="$PROJECT_DIR$/rocket/rocket.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shortcutdemo/shortcutdemo.iml" filepath="$PROJECT_DIR$/shortcutdemo/shortcutdemo.iml" />
     </modules>
   </component>
 </project>

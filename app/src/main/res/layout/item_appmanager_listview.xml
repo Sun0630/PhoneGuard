@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="60dp"
+              android:orientation="horizontal"
+    >
+
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/iv_appmanager_icon"
+        android:layout_width="45dp"
+        android:layout_height="45dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/list_selector"
+        >
+
+        <TextView
+            android:id="@+id/tv_appmanager_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:text="自动更新设置"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_appmanager_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_appmanager_title"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:text="自动更新已经打开"
+            android:textColor="#51b33b"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_appmanager_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:text="2.8m"/>
+        <!--分割线-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/list_devider"/>
+    </RelativeLayout>
+</LinearLayout>
