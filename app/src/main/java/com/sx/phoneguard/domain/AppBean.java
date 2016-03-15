@@ -15,6 +15,18 @@ public class AppBean {
     private boolean isSystem;//是否是系统软件
     private String packageName;//包名
 
+    public int hasCode(){
+        return packageName.hashCode();
+    }
+
+    public boolean equals(Object o){
+        if (o instanceof AppBean){
+            AppBean ab = (AppBean) o;
+            return packageName.equals(ab.packageName);
+        }
+        return false;
+    }
+
     public boolean isRom() {
         return isRom;
     }

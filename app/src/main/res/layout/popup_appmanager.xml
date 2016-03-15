@@ -7,7 +7,8 @@
 
     <LinearLayout
         android:clickable="true"
-        android:onClick="uninstall"
+        android:id="@+id/ll_uninstall"
+        android:background="@drawable/list_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -25,7 +26,8 @@
 
     <LinearLayout
         android:clickable="true"
-        android:onClick="launcher"
+        android:id="@+id/ll_launcher"
+        android:background="@drawable/list_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -43,7 +45,8 @@
 
     <LinearLayout
         android:clickable="true"
-        android:onClick="share"
+        android:id="@+id/ll_share"
+        android:background="@drawable/list_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -61,7 +64,8 @@
 
     <LinearLayout
         android:clickable="true"
-        android:onClick="setting"
+        android:id="@+id/ll_setting"
+        android:background="@drawable/list_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">

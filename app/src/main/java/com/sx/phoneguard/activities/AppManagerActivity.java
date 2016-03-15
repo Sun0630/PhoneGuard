@@ -1,7 +1,13 @@
 package com.sx.phoneguard.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,15 +29,20 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.stericson.RootTools.RootTools;
+import com.stericson.RootTools.RootToolsException;
 import com.sx.phoneguard.R;
 import com.sx.phoneguard.domain.AppBean;
 import com.sx.phoneguard.engine.AppEngine;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
-public class AppManagerActivity extends AppCompatActivity {
+public class AppManagerActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int LODING = 1 << 0;
     private static final int FINISH = 1 << 1;
@@ -44,6 +55,11 @@ public class AppManagerActivity extends AppCompatActivity {
     private TextView tv_sd;
     private TextView tv_tag;
     private PopupWindow pw;//弹出的窗体
+    private AppBean clickBean;//点击获取数据
+    private PackageManager pm;
+    private RemoveAppReceiver receiver;
+    private long romSize;
+    private long sdSize;
 
 
     @Override
@@ -74,6 +90,20 @@ public class AppManagerActivity extends AppCompatActivity {
         parent.getLocationInWindow(location);
         pw.showAtLocation(parent, Gravity.LEFT | Gravity.TOP, location[0] + 80, location[1]);
 
+        //获得四个组件
+
+        LinearLayout ll_share = (LinearLayout) view.findViewById(R.id.ll_share);
+        LinearLayout ll_unistanll = (LinearLayout) view.findViewById(R.id.ll_uninstall);
+        LinearLayout ll_setting = (LinearLayout) view.findViewById(R.id.ll_setting);
+        LinearLayout ll_launcher = (LinearLayout) view.findViewById(R.id.ll_launcher);
+
+        //设置事件监听
+        ll_share.setOnClickListener(this);
+        ll_unistanll.setOnClickListener(this);
+        ll_setting.setOnClickListener(this);
+        ll_launcher.setOnClickListener(this);
+
+
         //设置透明度渐变动画
         AlphaAnimation aa = new AlphaAnimation(0, 1);
         aa.setDuration(700);
@@ -95,36 +125,26 @@ public class AppManagerActivity extends AppCompatActivity {
         view.startAnimation(as);
     }
 
-    public void uninstall(View view) {
-
-    }
-
-    public void launcher(View view) {
-
-    }
-
-    public void share(View view) {
-
-    }
-
-    public void setting(View view) {
-
-    }
 
     private void initEvent() {
 
         lv_datas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0 || position == userApps.size() + 1) {
+                    return;
+                }
                 closePW();
                 initPW(view);
+                //内部调用adapter的getItem()方法。
+                clickBean = (AppBean) lv_datas.getItemAtPosition(position);
             }
         });
 
         lv_datas.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+                closePW();
             }
 
             /**
@@ -153,8 +173,8 @@ public class AppManagerActivity extends AppCompatActivity {
 
     private void initSDROMData() {
         //取数据
-        long romSize = AppEngine.getRom(getApplicationContext());
-        long sdSize = AppEngine.getSd(getApplicationContext());
+        romSize = AppEngine.getRom(getApplicationContext());
+        sdSize = AppEngine.getSd(getApplicationContext());
 
         String romMsg = Formatter.formatFileSize(getApplicationContext(), romSize);
         String sdMsg = Formatter.formatFileSize(getApplicationContext(), sdSize);
@@ -189,6 +209,98 @@ public class AppManagerActivity extends AppCompatActivity {
             super.handleMessage(msg);
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_uninstall://卸载软件
+                uninstall();
+                break;
+
+            case R.id.ll_share://分享软件
+                share();
+                break;
+
+            case R.id.ll_setting://设置
+                setting();
+                break;
+
+            case R.id.ll_launcher://启动软件
+                launcher();
+                break;
+        }
+        closePW();
+    }
+
+    /**
+     * 卸载
+     */
+    public void uninstall() {
+        //判断卸载的是用户软件还是系统软件
+        if (clickBean.isSystem()) {//系统软件卸载
+            try {
+                if (!RootTools.isRootAvailable()) {//没有root权限
+                    Toast.makeText(getApplicationContext(), "没有root权限", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!RootTools.isAccessGiven()) {
+                    Toast.makeText(getApplicationContext(), "请赋予我root权限", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                RootTools.sendShell("mount -o remount rw/system",30000);
+                RootTools.sendShell("rm -r "+clickBean.getPath(),30000);
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            } catch (RootToolsException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {//用户软件卸载
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.DELETE   ");
+            intent.addCategory("android.intent.action.DEFAULT");
+            intent.setData(Uri.parse("package:" + clickBean.getPackageName()));
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * 启动应用
+     */
+    public void launcher() {
+        //        System.out.println(clickBean.getPackageName()+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        Intent intent = pm.getLaunchIntentForPackage(clickBean.getPackageName());
+        startActivity(intent);
+    }
+
+    public void share() {
+        //分享：发送短信链接
+        /**
+         * <intent-filter>
+         *     <action android:name="android.intent.action.SEND" />
+         *     <category android:name="android.intent.category.DEFAULT" />
+         *     <data android:mimeType="text/plain" />
+         * </intent-filter>
+         */
+
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.SEND");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, "lianjie");
+        startActivity(intent);
+    }
+
+    /**
+     * 设置
+     */
+    public void setting() {
+        Intent intent = new Intent();
+        intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+        intent.setData(Uri.parse("package:" + clickBean.getPackageName()));
+        startActivity(intent);
+    }
 
 
     public class MyAdapter extends BaseAdapter {
@@ -308,6 +420,30 @@ public class AppManagerActivity extends AppCompatActivity {
         }.start();
     }
 
+    public class RemoveAppReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //重新读取数据，更新界面
+            //直接从内存删
+            //如果通过命令来删除，clickBean就会为空，软件就会报错。
+            if (clickBean == null) {
+                return;
+            }
+            if (clickBean.isSystem()) {
+                systemApps.remove(clickBean);
+            } else {
+                userApps.remove(clickBean);
+            }
+
+            //通知视图更新
+            adapter.notifyDataSetChanged();
+            //更新存储信息
+            initSDROMData();
+
+        }
+    }
+
     private void initView() {
         setContentView(R.layout.activity_app_manager);
         ll_loading = (LinearLayout) findViewById(R.id.ll_appmanager_loading);
@@ -315,5 +451,18 @@ public class AppManagerActivity extends AppCompatActivity {
         tv_rom = (TextView) findViewById(R.id.tv_appmanager_rom);
         tv_sd = (TextView) findViewById(R.id.tv_appmanager_sd);
         tv_tag = (TextView) findViewById(R.id.tv_manager_tag);
+        pm = getPackageManager();
+        //注册一个广播接收者,接收卸载应用时的广播
+        receiver = new RemoveAppReceiver();
+        IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addDataScheme("package");
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        closePW();
+        unregisterReceiver(receiver);
+        super.onDestroy();
     }
 }
