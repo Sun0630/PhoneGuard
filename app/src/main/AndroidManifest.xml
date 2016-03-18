@@ -133,6 +133,8 @@
 
         <activity android:name=".activities.AppManagerActivity">
         </activity>
+        <activity android:name=".activities.TaskManagerActivity">
+        </activity>
     </application>
 
 </manifest>

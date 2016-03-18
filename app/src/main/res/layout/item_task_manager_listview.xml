@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="60dp"
+              android:orientation="horizontal"
+    >
+
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/iv_task_manager_icon"
+        android:layout_width="45dp"
+        android:layout_height="45dp"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_task_setting"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/list_selector"
+        >
+
+        <TextView
+            android:id="@+id/tv_task_manager_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:text="App的名字"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_task_manager_memidirty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_task_manager_title"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:text="内存占用"
+            android:textColor="#51b33b"
+            android:textSize="16sp"/>
+
+        <CheckBox
+
+            android:id="@+id/cb_task_manager_checked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:text=""/>
+        <!--分割线-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/list_devider"/>
+    </RelativeLayout>
+</LinearLayout>
