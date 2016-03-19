@@ -16,8 +16,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by ad on 2016/3/18.
@@ -77,7 +77,7 @@ public class TaskEngine {
      * @return 获取所有正在运行中的进程
      */
     public static List<TaskBean> getRunningProcess(Context context) {
-        List<TaskBean> datas = new ArrayList<>();
+        List<TaskBean> datas = new CopyOnWriteArrayList<>();
 
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         PackageManager pm = context.getPackageManager();

@@ -36,6 +36,7 @@
     </RelativeLayout>
 
     <FrameLayout
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView
@@ -69,6 +70,38 @@
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
-
     </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="清理"
+            android:onClick="clear"
+            android:background="@drawable/button_selector"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="全选"
+            android:onClick="selectAll"
+            android:background="@drawable/button_selector"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="反选"
+            android:onClick="inserveSelect"
+            android:background="@drawable/button_selector"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="设置"
+            android:onClick="setting"
+            android:background="@drawable/button_selector"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
 </LinearLayout>

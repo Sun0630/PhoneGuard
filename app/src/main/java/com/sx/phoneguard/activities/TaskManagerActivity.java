@@ -1,5 +1,6 @@
 package com.sx.phoneguard.activities;
 
+import android.app.ActivityManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,8 +23,8 @@ import com.sx.phoneguard.R;
 import com.sx.phoneguard.domain.TaskBean;
 import com.sx.phoneguard.engine.TaskEngine;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TaskManagerActivity extends AppCompatActivity {
 
@@ -39,11 +40,17 @@ public class TaskManagerActivity extends AppCompatActivity {
     private long avaiMem;
     private long totalMemory;
     //用户进程
-    private List<TaskBean> userDatas = new ArrayList<>();
+    /**
+     * CopyOnWriteArrayList
+     * 在对其实例进行修改操作（add/remove等）会新建一个数据并修改，
+     * 修改完毕之后，再将原来的引用指向新的数组。这样，修改过程没有修改原来的数组。
+     */
+    private List<TaskBean> userDatas = new CopyOnWriteArrayList<>();
     //系统进程
-    private List<TaskBean> sysDatas = new ArrayList<>();
+    private List<TaskBean> sysDatas = new CopyOnWriteArrayList<>();
 
     private TaskManagerActivity.MyAdapter adapter;
+    private ActivityManager am;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +126,8 @@ public class TaskManagerActivity extends AppCompatActivity {
         }
     };
 
+
+
     private class MyAdapter extends BaseAdapter {
 
         @Override
@@ -187,14 +196,24 @@ public class TaskManagerActivity extends AppCompatActivity {
                 tag.rl_task_setting.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        //如果是自己，让复选框隐藏
+                        if (bean.getPackName().equals(getPackageName())){
+                            return;
+                        }
                         //取反
                         finalTag.cb_checked.setChecked(!finalTag.cb_checked.isChecked());
                     }
                 });
 
-
                 //应该从bean中取出复选框状态
                 tag.cb_checked.setChecked(bean.isChecked());
+                //如果是自己，让复选框隐藏
+                if (bean.getPackName().equals(getPackageName())){
+                    tag.cb_checked.setVisibility(View.GONE);
+                }else {
+                    tag.cb_checked.setVisibility(View.VISIBLE);
+                }
                 return convertView;
             }
 
@@ -260,5 +279,98 @@ public class TaskManagerActivity extends AppCompatActivity {
         tv_tag = (TextView) findViewById(R.id.tv_task_tag);
         lv_datas = (ListView) findViewById(R.id.lv_task_manager_datas);
         ll_loading = (LinearLayout) findViewById(R.id.ll_task_manager_loading);
+        am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+    }
+
+    /**
+     * 清理进程
+     * @param view
+     *
+     */
+    public void clear(View view) {
+        //遍历容器中的所有数据，然后设置CheckBox
+        for (TaskBean bean :
+                userDatas) {
+            //如果该程序的复选框被选中就要被清理
+            if (bean.isChecked()){
+                am.killBackgroundProcesses(bean.getPackName());
+                //有些进程杀不掉，就从容器中移除出去就行
+
+                //因为在遍历集合的时候不能修改集合的结构，这里使用CopyOnWriteArrayList();方法，
+                //这个方法是先把集合中的数据拷贝一份，然后
+                userDatas.remove(bean);
+            }
+        }
+
+        for (TaskBean bean :
+                sysDatas) {
+
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 全选
+     * @param view
+     */
+    public void selectAll(View view) {
+        //遍历容器中的所有数据，然后设置CheckBox
+        for (TaskBean bean :
+                userDatas) {
+            //不能选择自己
+            if (bean.getPackName().equals(getPackageName())){
+                bean.setIsChecked(false);
+            }else {
+                bean.setIsChecked(true);
+            }
+        }
+
+        for (TaskBean bean :
+                sysDatas) {
+            //不能选择自己
+            if (bean.getPackName().equals(getPackageName())){
+                bean.setIsChecked(false);
+            }else {
+                bean.setIsChecked(true);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 反选
+     * @param view
+     */
+    public void inserveSelect(View view) {
+        for (TaskBean bean :
+                userDatas) {
+            //不能选择自己
+            if (bean.getPackName().equals(getPackageName())){
+                bean.setIsChecked(false);
+            }else {
+                bean.setIsChecked(!bean.isChecked());
+            }
+        }
+
+        for (TaskBean bean :
+                sysDatas) {
+            //不能选择自己
+            if (bean.getPackName().equals(getPackageName())){
+                bean.setIsChecked(false);
+            }else {
+                bean.setIsChecked(!bean.isChecked());
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+    /**
+     *设置
+     * @param view
+     */
+    public void setting(View view) {
+
     }
 }
