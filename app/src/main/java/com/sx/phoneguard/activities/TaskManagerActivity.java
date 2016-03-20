@@ -1,6 +1,8 @@
 package com.sx.phoneguard.activities;
 
 import android.app.ActivityManager;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,10 +20,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sx.phoneguard.R;
 import com.sx.phoneguard.domain.TaskBean;
 import com.sx.phoneguard.engine.TaskEngine;
+import com.sx.phoneguard.utils.MyConstants;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -51,6 +55,7 @@ public class TaskManagerActivity extends AppCompatActivity {
 
     private TaskManagerActivity.MyAdapter adapter;
     private ActivityManager am;
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,23 +107,8 @@ public class TaskManagerActivity extends AppCompatActivity {
                     tv_tag.setVisibility(View.GONE);
                     break;
                 case FINISH://加载数据完成
-                    //这里不可能没有数据，没有数据就不作处理。
-                    ll_loading.setVisibility(View.GONE);
-                    lv_datas.setVisibility(View.VISIBLE);
-                    tv_tag.setVisibility(View.VISIBLE);
 
-                    tv_runningnumber.setText("运行中的进程:" + (userDatas.size() + sysDatas.size()) + "个");
-                    //格式化单位为MB
-                    String avaiMemF = Formatter.formatFileSize(getApplicationContext(), avaiMem);
-                    String totalMemF = Formatter.formatFileSize(getApplicationContext(), totalMemory);
-                    tv_meminfo.setText("剩余/总内存:" + (avaiMemF + "/" + totalMemF));
-
-                    if (adapter == null) {
-                        adapter = new MyAdapter();
-                        lv_datas.setAdapter(adapter);
-                    } else {
-                        adapter.notifyDataSetChanged();
-                    }
+                    updateView();
 
                     break;
             }
@@ -126,12 +116,39 @@ public class TaskManagerActivity extends AppCompatActivity {
         }
     };
 
+    private void updateView() {
+        //这里不可能没有数据，没有数据就不作处理。
+        ll_loading.setVisibility(View.GONE);
+        lv_datas.setVisibility(View.VISIBLE);
+        tv_tag.setVisibility(View.VISIBLE);
+
+        if (!sp.getBoolean(MyConstants.SHOWSYSTEM, false)) {
+            tv_runningnumber.setText("运行中的进程:" + (userDatas.size()) + "个");
+        } else {
+            tv_runningnumber.setText("运行中的进程:" + (userDatas.size() + sysDatas.size()) + "个");
+        }
+        //格式化单位为MB
+        String avaiMemF = Formatter.formatFileSize(getApplicationContext(), avaiMem);
+        String totalMemF = Formatter.formatFileSize(getApplicationContext(), totalMemory);
+        tv_meminfo.setText("可用/总内存:" + (avaiMemF + "/" + totalMemF));
+
+        if (adapter == null) {
+            adapter = new MyAdapter();
+            lv_datas.setAdapter(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
+    }
 
 
     private class MyAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
+            if (!sp.getBoolean(MyConstants.SHOWSYSTEM, false)) {//不显示系统进程
+                return userDatas.size() + 1;
+            }
+
             return userDatas.size() + 1 + sysDatas.size() + 1;
         }
 
@@ -198,7 +215,7 @@ public class TaskManagerActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         //如果是自己，让复选框隐藏
-                        if (bean.getPackName().equals(getPackageName())){
+                        if (bean.getPackName().equals(getPackageName())) {
                             return;
                         }
                         //取反
@@ -209,15 +226,24 @@ public class TaskManagerActivity extends AppCompatActivity {
                 //应该从bean中取出复选框状态
                 tag.cb_checked.setChecked(bean.isChecked());
                 //如果是自己，让复选框隐藏
-                if (bean.getPackName().equals(getPackageName())){
+                if (bean.getPackName().equals(getPackageName())) {
                     tag.cb_checked.setVisibility(View.GONE);
-                }else {
+                } else {
                     tag.cb_checked.setVisibility(View.VISIBLE);
                 }
                 return convertView;
             }
 
         }
+    }
+
+    /**
+     * 当界面回复显示的时候调用，
+     */
+    @Override
+    protected void onResume() {
+        updateView();
+        super.onResume();
     }
 
     private class Tag {
@@ -280,38 +306,54 @@ public class TaskManagerActivity extends AppCompatActivity {
         lv_datas = (ListView) findViewById(R.id.lv_task_manager_datas);
         ll_loading = (LinearLayout) findViewById(R.id.ll_task_manager_loading);
         am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+
+        sp = getSharedPreferences(MyConstants.SPNAME, MODE_PRIVATE);
     }
 
     /**
      * 清理进程
-     * @param view
      *
+     * @param view
      */
     public void clear(View view) {
-        //遍历容器中的所有数据，然后设置CheckBox
-        for (TaskBean bean :
-                userDatas) {
+        int number = 0;//清理的进程个数
+        long clearMem = 0;
+
+        //遍历容器中的所有数据
+        for (TaskBean bean : userDatas) {
             //如果该程序的复选框被选中就要被清理
-            if (bean.isChecked()){
+            if (bean.isChecked()) {
                 am.killBackgroundProcesses(bean.getPackName());
                 //有些进程杀不掉，就从容器中移除出去就行
-
                 //因为在遍历集合的时候不能修改集合的结构，这里使用CopyOnWriteArrayList();方法，
                 //这个方法是先把集合中的数据拷贝一份，然后
                 userDatas.remove(bean);
+                number++;
+                clearMem += bean.getSize();
             }
         }
 
-        for (TaskBean bean :
-                sysDatas) {
-
+        for (TaskBean bean : sysDatas) {
+            if (bean.isChecked()) {
+                am.killBackgroundProcesses(bean.getPackName());
+                sysDatas.remove(bean);
+                number++;
+                clearMem += bean.getSize();
+            }
         }
 
-        adapter.notifyDataSetChanged();
+
+        avaiMem += clearMem;
+        updateView();//更新界面
+        Toast.makeText(getApplicationContext(), "共清理了" + number + "个进程"
+                        + "释放了" + Formatter.formatFileSize(getApplicationContext(), clearMem) + "内存！",
+                Toast.LENGTH_SHORT).show();
+
     }
 
     /**
      * 全选
+     *
      * @param view
      */
     public void selectAll(View view) {
@@ -319,9 +361,9 @@ public class TaskManagerActivity extends AppCompatActivity {
         for (TaskBean bean :
                 userDatas) {
             //不能选择自己
-            if (bean.getPackName().equals(getPackageName())){
+            if (bean.getPackName().equals(getPackageName())) {
                 bean.setIsChecked(false);
-            }else {
+            } else {
                 bean.setIsChecked(true);
             }
         }
@@ -329,9 +371,9 @@ public class TaskManagerActivity extends AppCompatActivity {
         for (TaskBean bean :
                 sysDatas) {
             //不能选择自己
-            if (bean.getPackName().equals(getPackageName())){
+            if (bean.getPackName().equals(getPackageName())) {
                 bean.setIsChecked(false);
-            }else {
+            } else {
                 bean.setIsChecked(true);
             }
         }
@@ -341,15 +383,16 @@ public class TaskManagerActivity extends AppCompatActivity {
 
     /**
      * 反选
+     *
      * @param view
      */
     public void inserveSelect(View view) {
         for (TaskBean bean :
                 userDatas) {
             //不能选择自己
-            if (bean.getPackName().equals(getPackageName())){
+            if (bean.getPackName().equals(getPackageName())) {
                 bean.setIsChecked(false);
-            }else {
+            } else {
                 bean.setIsChecked(!bean.isChecked());
             }
         }
@@ -357,20 +400,29 @@ public class TaskManagerActivity extends AppCompatActivity {
         for (TaskBean bean :
                 sysDatas) {
             //不能选择自己
-            if (bean.getPackName().equals(getPackageName())){
+            if (bean.getPackName().equals(getPackageName())) {
                 bean.setIsChecked(false);
-            }else {
+            } else {
                 bean.setIsChecked(!bean.isChecked());
             }
         }
 
         adapter.notifyDataSetChanged();
     }
+
     /**
-     *设置
+     * 设置
+     *
      * @param view
      */
     public void setting(View view) {
+        /**
+         * 新打开一个Activity
+         *  1，是否显示系统进程
+         *  2，是否开启锁屏清理进程
+         */
 
+        Intent intent = new Intent(this,TaskManagerSettingActivity.class);
+        startActivity(intent);
     }
 }

@@ -2,6 +2,7 @@ package com.sx.phoneguard.utils;
 
 /**
  * Created by ad on 2016/2/14.
+ * 常量类
  */
 public interface MyConstants {
     String SPNAME = "myconfig";
@@ -15,4 +16,5 @@ public interface MyConstants {
     String PHONENUMBER = "phonenumber";
     String BOOTBLACK = "bootblack";//是否开机自动启动黑名单拦截设置
     String STYLE = "style";
+    String SHOWSYSTEM = "showsystem";//是否显示系统进程
 }

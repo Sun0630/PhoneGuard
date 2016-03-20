@@ -78,6 +78,7 @@ public class PhoneLocationService extends Service {
     public void initToast() {
         view = View.inflate(getApplicationContext(), R.layout.sys_toast, null);
         setStyle();
+        initEvent();
         tv_location = (TextView) view.findViewById(R.id.title);
 
         params = new WindowManager.LayoutParams();
@@ -202,7 +203,7 @@ public class PhoneLocationService extends Service {
         //注册一个外拨电话的广播接收者，当拨出电话的时候也能显示号码的归属地
         outCallReceiver = new OutCallReceiver();
         //初始化吐司的触摸事件
-        initEvent();
+
         registerReceiver(outCallReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
 
         super.onCreate();

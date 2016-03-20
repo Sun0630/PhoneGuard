@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sx.phoneguard.activities.TaskManagerSettingActivity">
+
+
+    <TextView
+       style="@style/titleStyle"
+        android:text="进程管理"
+        />
+
+    <CheckBox
+        android:id="@+id/cb_task_setting_issystem"
+        android:text="是否显示系统进程"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <CheckBox
+        android:id="@+id/cb_task_setting_lockclear"
+        android:text="是否进行锁屏清理"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

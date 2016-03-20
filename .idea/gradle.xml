@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/lockscreen" />
             <option value="$PROJECT_DIR$/rocket" />
             <option value="$PROJECT_DIR$/shortcutdemo" />
+            <option value="$PROJECT_DIR$/widgetdemo" />
           </set>
         </option>
       </GradleProjectSettings>
