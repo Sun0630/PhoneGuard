@@ -133,4 +133,11 @@ public class AToolsActivity extends AppCompatActivity {
             }
         }.start();
     }
+
+    public void appLock(View view) {
+        //启动程序锁界面
+        Intent intent = new Intent(this,LockAppFragment.class);
+        startActivity(intent);
+        finish();
+    }
 }

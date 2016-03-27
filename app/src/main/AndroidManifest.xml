@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.WRITE_SMS"/>
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
         android:allowBackup="true"
@@ -36,7 +37,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.HomeActivity">
+        <activity
+            android:name=".activities.HomeActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="com.sx.home"/>
 
@@ -53,6 +56,7 @@
         </activity>
         <activity android:name=".activities.Setup4Activity">
         </activity>
+        <activity android:name=".activities.LockAppFragment"/>
 
         <!--
         <receiver
@@ -168,6 +172,15 @@
                 <action android:name="com.sx.aaa"/>
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".service.WatchDogService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+
+        <activity android:name=".activities.WatchDogInputPassActivity">
+        </activity>
     </application>
 
 </manifest>

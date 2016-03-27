@@ -74,7 +74,6 @@ public class AppEngine {
             }else {
                 bean.setIsSystem(false);
             }
-            apps.add(bean);
 
             if((flag & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0){//在外部存储中
                 bean.setIsRom(false);

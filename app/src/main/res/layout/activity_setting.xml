@@ -49,6 +49,15 @@
         >
     </com.sx.phoneguard.view.SettingView>
 
+    <com.sx.phoneguard.view.SettingView
+        android:id="@+id/sv_setting_watch_dog"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        sx:content="看门狗服务已开启,看门狗服务已关闭"
+        sx:settingTitle="看门狗服务"
+        >
+    </com.sx.phoneguard.view.SettingView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="75dp"

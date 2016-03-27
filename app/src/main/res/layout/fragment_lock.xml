@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_fragment_nodata"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="没有已加锁的数据哟亲~"/>
+
+        <ProgressBar
+            android:id="@+id/pb_fragment_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+        <LinearLayout
+            android:id="@+id/ll_fragment_datas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_fragment_unlockNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#d0c3d8f4"
+                android:text="已加锁的软件(34)"
+                android:textColor="#000000"/>
+
+            <ListView
+                android:id="@+id/lv_fragment_unlock_datas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </ListView>
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.sx.phoneguard.R;
 import com.sx.phoneguard.service.BlackService;
 import com.sx.phoneguard.service.PhoneLocationService;
+import com.sx.phoneguard.service.WatchDogService;
 import com.sx.phoneguard.utils.MyConstants;
 import com.sx.phoneguard.utils.ServiceUtils;
 import com.sx.phoneguard.view.SettingView;
@@ -24,6 +25,7 @@ public class SettingActivity extends AppCompatActivity {
     private SettingView sv_black_boot;
     private SettingView sv_phonecall_location;
     private TextView tv_style_text;
+    private SettingView sv_watch_dog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,28 +40,63 @@ public class SettingActivity extends AppCompatActivity {
      * 初始化数据
      */
     private void initData() {
+        //检查更新
         if (sp.getBoolean(MyConstants.ISCHECKVERSION, false)) {
             sv_update.setChecked(true);
         } else {
             sv_update.setChecked(false);
         }
+
+        //黑名单
         if (ServiceUtils.isRun(SettingActivity.this, "com.sx.phoneguard.service.BlackService")) {
             sv_black.setChecked(true);
         } else {
             sv_black.setChecked(false);
         }
 
+        //电话归属地初始化状态
         if (ServiceUtils.isRun(SettingActivity.this, "com.sx.phoneguard.service.PhoneLocationService")) {
             sv_phonecall_location.setChecked(true);
         } else {
             sv_phonecall_location.setChecked(false);
         }
+
+        //看门狗服务初始化状态
+        if (ServiceUtils.isRun(SettingActivity.this, "com.sx.phoneguard.service.WatchDogService")) {
+            sv_watch_dog.setChecked(true);
+        } else {
+            sv_watch_dog.setChecked(false);
+        }
+
         //设置初始化状态
         sv_black_boot.setChecked(sp.getBoolean(MyConstants.BOOTBLACK, false));
         tv_style_text.setText(items[sp.getInt(MyConstants.STYLE, 0)]);
     }
 
     private void initEvent() {
+
+        /**
+         * 看门狗的事件
+         */
+        sv_watch_dog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sv_watch_dog.setChecked(!sv_watch_dog.getChecked());
+                //启动或关闭黑名单拦截服务
+                //1,判断服务是否启动
+                if (ServiceUtils.isRun(SettingActivity.this, "com.sx.phoneguard.service.WatchDogService")) {
+                    //服务已经启动，就关闭服务
+                    Intent intent = new Intent(SettingActivity.this, WatchDogService.class);
+                    stopService(intent);
+                } else {
+                    Intent intent = new Intent(SettingActivity.this, WatchDogService.class);
+                    startService(intent);
+                }
+                //2，创建服务，拦截短信，电话监听
+            }
+        });
+
+
         sv_update.setClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,6 +175,7 @@ public class SettingActivity extends AppCompatActivity {
         sv_black_boot = (SettingView) findViewById(R.id.sv_setting_black_bootcomplete);
         sv_phonecall_location = (SettingView) findViewById(R.id.sv_setting_phonecall_location);
         tv_style_text = (TextView) findViewById(R.id.tv_setting_item_style_text);
+        sv_watch_dog = (SettingView) findViewById(R.id.sv_setting_watch_dog);
     }
 
     /**

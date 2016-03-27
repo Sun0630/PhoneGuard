@@ -2,4 +2,7 @@
     <string name="app_name">安全卫士</string>
     <string name="sample_device_admin">设备管理员</string>
     <string name="sample_device_admin_description">必须开启设备管理员</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
