@@ -1,6 +1,9 @@
 package com.sx.phoneguard.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -20,6 +23,7 @@ public class WatchDogInputPassActivity extends AppCompatActivity {
     private EditText et_pass;
     private String packname;//要加锁的包名
     private ImageView iv_icon;
+    private MyReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +31,24 @@ public class WatchDogInputPassActivity extends AppCompatActivity {
         packname = getIntent().getStringExtra("packname");
         initView();
         initData();
+        //初始化广播接收者
+        receiver = new MyReceiver();
+        //注册广播接收者
+        registerReceiver(receiver,new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
     }
+
+    //监听Home键的事件的广播
+    private class MyReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)){
+                //处理home键的事件
+                System.out.println(intent.getStringExtra("reason")+">>>>>>>>>>>>>>>>>>>>>>");
+            }
+        }
+    }
+
 
     private void initData() {
         PackageManager pm = getPackageManager();
@@ -86,5 +107,11 @@ public class WatchDogInputPassActivity extends AppCompatActivity {
 
     public void cancle(View view) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(receiver);
+        super.onDestroy();
     }
 }

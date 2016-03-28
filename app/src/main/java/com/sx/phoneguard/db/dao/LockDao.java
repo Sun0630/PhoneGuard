@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
 import com.sx.phoneguard.db.LockDB;
 
@@ -17,9 +18,10 @@ import java.util.List;
 public class LockDao {
 
     private LockDB lockdb;
-
+    Context context;
     public LockDao(Context context) {
         this.lockdb = new LockDB(context);
+        this.context = context;
     }
 
     /**
@@ -33,6 +35,8 @@ public class LockDao {
         values.put(LockDB.PACKNAME, packName);
         db.insert(LockDB.TABLENAME, null, values);
         db.close();
+        //发送内容观察者的通知
+        context.getContentResolver().notifyChange(Uri.parse(LockDB.URI),null);
     }
 
     /**
@@ -44,6 +48,8 @@ public class LockDao {
         SQLiteDatabase db = lockdb.getWritableDatabase();
         db.delete(LockDB.TABLENAME, LockDB.PACKNAME + " = ? ", new String[]{packName});
         db.close();
+        //发送内容观察者的通知
+        context.getContentResolver().notifyChange(Uri.parse(LockDB.URI), null);
     }
 
 
@@ -55,12 +61,13 @@ public class LockDao {
      */
     public boolean isLocked(String packName) {
         boolean res = false;
-        SQLiteDatabase db = lockdb.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select 1 from " + LockDB.TABLENAME + " where " + LockDB.PACKNAME + " = ?"
-                , new String[]{packName});
+        SQLiteDatabase db =lockdb.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select 1 from " + LockDB.TABLENAME +
+                " where " + LockDB.PACKNAME + " = ?", new String[]{packName});
         if (cursor.moveToNext()) {
-            return true;
+            res = true;
         }
+        cursor.close();
         db.close();
         return res;
     }
@@ -72,7 +79,7 @@ public class LockDao {
         List<String> datas = new ArrayList<>();
         SQLiteDatabase db = lockdb.getReadableDatabase();
         Cursor cursor = db.rawQuery("select " + LockDB.PACKNAME + " from " + LockDB.TABLENAME, null);
-        while (cursor.moveToFirst()) {
+        while (cursor.moveToNext()) {
             String data = cursor.getString(0);
             datas.add(data);
         }

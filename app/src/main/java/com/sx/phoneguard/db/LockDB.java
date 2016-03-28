@@ -12,6 +12,9 @@ public class LockDB extends SQLiteOpenHelper {
 
     public static final String TABLENAME= "locks";
     public static final String PACKNAME= "packname";
+    public static final String URI = "content://com.sx.lockdao";
+
+
     public LockDB(Context context) {
         super(context, "lock.db", null, 1);
     }
