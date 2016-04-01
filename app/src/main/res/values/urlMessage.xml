@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="url">http://192.168.147.2:8080/version.json</string>
+    <string name="url">http://192.168.2.105:8080/version.json</string>
+    <string name="getVirusVersion">http://192.168.2.105:8080/VirusServer/getversion</string>
+    <string name="getVirues">http://192.168.2.105:8080/VirusServer/getvirues</string>
 </resources>

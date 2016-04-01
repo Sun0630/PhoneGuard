@@ -31,7 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sp = getSharedPreferences(MyConstants.SPNAME,MODE_PRIVATE);
+        sp = getSharedPreferences(MyConstants.SPNAME, MODE_PRIVATE);
         initView();//初始化界面
         initData();//初始化数据
         initEvent();//所有组件的初始化事件
@@ -39,9 +39,10 @@ public class HomeActivity extends AppCompatActivity {
 
     /**
      * 判断是否设置过密码
+     *
      * @return
      */
-    private boolean isSetPass(){
+    private boolean isSetPass() {
         boolean res = false;
         //拿到SharePreference中保存的密码
 
@@ -55,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
     /**
      * 显示输入密码的对话框
      */
-    private void showEnterPassDialog(){
+    private void showEnterPassDialog() {
         //密码保存到SHarePreference中
         AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
         View view = View.inflate(getApplicationContext(), R.layout.dialog_inputpassword, null);
@@ -102,14 +103,14 @@ public class HomeActivity extends AppCompatActivity {
      * 加载手机防盗界面
      */
     private void loadLostFind() {
-        Intent intent = new Intent(HomeActivity.this,LostFindActivity.class);
+        Intent intent = new Intent(HomeActivity.this, LostFindActivity.class);
         startActivity(intent);
     }
 
     /**
      * 显示设置密码的对话框
      */
-    private void showSetPassDialog(){
+    private void showSetPassDialog() {
         //密码保存到SHarePreference中
         AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
         View view = View.inflate(getApplicationContext(), R.layout.dialog_serpassword, null);
@@ -161,52 +162,56 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initEvent() {
         //为表格布局的每个项都设置监听
-       gv_jiugongge.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
-           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               //有9宫格
-               switch (position){
-                   case 0://手机防盗
+        gv_jiugongge.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //有9宫格
+                switch (position) {
+                    case 0://手机防盗
                         /*
                         逻辑：
                             判断有没有设置过密码isSetPass()
                             如果已经设置过了密码，就显示输入密码的对话框showEnterPass();
                              如果没有设置密码，显示设置密码的对话框showSetPass();
                          */
-                       if(isSetPass()){//设置过密码了
-                           //显示输入密码的对话框
-                           showEnterPassDialog();
-                       }else {
-                           //显示设置密码对话框
-                           showSetPassDialog();
-                       }
-                       break;
-                   case 1://通讯卫士
-                       Intent intent1 = new Intent(HomeActivity.this,CommunicationGuardActivity.class);
-                       startActivity(intent1);
+                        if (isSetPass()) {//设置过密码了
+                            //显示输入密码的对话框
+                            showEnterPassDialog();
+                        } else {
+                            //显示设置密码对话框
+                            showSetPassDialog();
+                        }
                         break;
-                   case 2://软件管家
-                       Intent intent2 = new Intent(HomeActivity.this,AppManagerActivity.class);
-                       startActivity(intent2);
-                       break;
-                   case 3://进程管理
-                       Intent intent3 = new Intent(HomeActivity.this,TaskManagerActivity.class);
-                       startActivity(intent3);
-                       break;
-                   case 7://高级工具
-                       Intent intent7 = new Intent(HomeActivity.this,AToolsActivity.class);
-                       startActivity(intent7);
-                       break;
-                   case 8://设置中心
-                       Intent intent8 = new Intent(HomeActivity.this,SettingActivity.class);
-                       startActivity(intent8);
-                       break;
+                    case 1://通讯卫士
+                        Intent intent1 = new Intent(HomeActivity.this, CommunicationGuardActivity.class);
+                        startActivity(intent1);
+                        break;
+                    case 2://软件管家
+                        Intent intent2 = new Intent(HomeActivity.this, AppManagerActivity.class);
+                        startActivity(intent2);
+                        break;
+                    case 3://进程管理
+                        Intent intent3 = new Intent(HomeActivity.this, TaskManagerActivity.class);
+                        startActivity(intent3);
+                        break;
+                    case 5://手机杀毒
+                        Intent intent4 = new Intent(HomeActivity.this, AntiVirusActivity.class);
+                        startActivity(intent4);
+                        break;
+                    case 7://高级工具
+                        Intent intent7 = new Intent(HomeActivity.this, AToolsActivity.class);
+                        startActivity(intent7);
+                        break;
+                    case 8://设置中心
+                        Intent intent8 = new Intent(HomeActivity.this, SettingActivity.class);
+                        startActivity(intent8);
+                        break;
 
-                   default:
-                       break;
-               }
-           }
-       });
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     private void initData() {
@@ -218,9 +223,9 @@ public class HomeActivity extends AppCompatActivity {
             "进程管理", "流量统计", "手机杀毒",
             "缓存清理", "高级工具", "设置中心"};
 
-    int[] icons = {R.drawable.safe,R.drawable.callmsgsafe,R.drawable.icon_selector,
-            R.drawable.taskmanager,R.drawable.netmanager, R.drawable.trojan,
-            R.drawable.sysoptimize,R.drawable.atools,R.drawable.settings
+    int[] icons = {R.drawable.safe, R.drawable.callmsgsafe, R.drawable.icon_selector,
+            R.drawable.taskmanager, R.drawable.netmanager, R.drawable.trojan,
+            R.drawable.sysoptimize, R.drawable.atools, R.drawable.settings
     };
 
     private void initView() {
@@ -228,7 +233,7 @@ public class HomeActivity extends AppCompatActivity {
         gv_jiugongge = (GridView) findViewById(R.id.gv_home_jiugongge);
     }
 
-    class GVAdapter extends BaseAdapter{
+    class GVAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -261,6 +266,7 @@ public class HomeActivity extends AppCompatActivity {
 
         /**
          * 使用缓存
+         *
          * @param position
          * @param convertView
          * @param parent
@@ -269,23 +275,23 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
-            if(convertView == null) {
+            if (convertView == null) {
                 convertView = View.inflate(getApplicationContext(), R.layout.item_home_gridview, null);
                 holder = new ViewHolder();
                 holder.iv_icon = (ImageView) convertView.findViewById(R.id.iv_girdview_item_icon);
                 holder.tv_name = (TextView) convertView.findViewById(R.id.tv_gridview_item_name);
                 //绑定子组件
                 convertView.setTag(holder);
-            }else {
+            } else {
                 holder = (ViewHolder) convertView.getTag();
             }
 
             //为这两个组件设置显示内容
             holder.iv_icon.setBackgroundResource(icons[position]);
             holder.tv_name.setText(names[position]);
-            if (position==0){
+            if (position == 0) {
                 String newName = sp.getString(MyConstants.NEWNAME, "");
-                if (!TextUtils.isEmpty(newName)){
+                if (!TextUtils.isEmpty(newName)) {
                     holder.tv_name.setText(newName);
                 }
             }
@@ -293,7 +299,7 @@ public class HomeActivity extends AppCompatActivity {
             return convertView;
         }
 
-        private class ViewHolder{
+        private class ViewHolder {
             private ImageView iv_icon;
             private TextView tv_name;
         }

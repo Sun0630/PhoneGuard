@@ -39,9 +39,8 @@
         </activity>
         <activity
             android:name=".activities.HomeActivity"
-            android:launchMode="singleTask"
             android:excludeFromRecents="true"
-            >
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="com.sx.home"/>
 
@@ -181,8 +180,11 @@
             android:exported="true">
         </service>
 
-        <activity android:name=".activities.WatchDogInputPassActivity"
+        <activity
+            android:name=".activities.WatchDogInputPassActivity"
             android:launchMode="singleInstance">
+        </activity>
+        <activity android:name=".activities.AntiVirusActivity">
         </activity>
     </application>
 

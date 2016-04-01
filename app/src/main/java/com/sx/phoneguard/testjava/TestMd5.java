@@ -1,22 +1,26 @@
-package com.sx.phoneguard.utils;
+package com.sx.phoneguard.testjava;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by ad on 2016/2/14.
+ * Created by ad on 2016/3/29.
+ * 获取文件的MD5
  */
-public class Md5Utils {
+public class TestMd5 {
 
+    public static void main(String args[]) {
+        String fileMd5 = getFileMd5(new File("实验指导书.pdf"));
+        System.out.println(fileMd5);
+    }
 
     /**
      * @param file 传入一个文件
      * @return 这个文件对应的MD5值
      */
     public static String getFileMd5(File file) {
-        StringBuilder res = new StringBuilder("");
+        String res = "";
         try {
             MessageDigest instance = MessageDigest.getInstance("md5");
             //使用流读取文件
@@ -26,7 +30,7 @@ public class Md5Utils {
             int len = fis.read(buffer);
 
             while (len != -1) {
-                instance.update(buffer, 0, len);
+                instance.update(buffer,0,len);
                 len = fis.read(buffer);
             }
             byte[] digest = instance.digest();
@@ -37,34 +41,13 @@ public class Md5Utils {
                 if (hexString.length() == 1) {
                     hexString = "0" + hexString;
                 }
-                res.append(hexString);
+                res += hexString;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return res+"";
-    }
-
-
-    public static String md5JiaMi(String source) {
-        String res = "";
-
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("Md5");
-            byte[] digest = md5.digest(source.getBytes());
-            for (byte b : digest) {
-                int data = b & 0xff;
-                String hex = Integer.toHexString(data);
-                if (hex.length() == 1) {
-                    hex = "0" + hex;
-                }
-                res += hex;
-            }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
         return res;
     }
 }

@@ -73,6 +73,10 @@ public class SplashActivity extends Activity {
             copyThread("address.db");
         }
 
+        if(!isExists("antivirus.db")){
+            copyThread("antivirus.db");
+        }
+
 
         //当设置中心的自动检查更新打钩的时候再检查更新版本。否则直接跳主界面
         if (sp.getBoolean(MyConstants.ISCHECKVERSION, false)) {
