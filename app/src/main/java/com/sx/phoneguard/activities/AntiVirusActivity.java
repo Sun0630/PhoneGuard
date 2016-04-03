@@ -32,10 +32,12 @@ import com.sx.phoneguard.engine.AppEngine;
 import com.sx.phoneguard.utils.Md5Utils;
 import com.sx.phoneguard.utils.ShowToast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AntiVirusActivity extends AppCompatActivity {
@@ -58,10 +60,10 @@ public class AntiVirusActivity extends AppCompatActivity {
     }
 
     private Dialog dialog;
-    private Handler handler2 = new Handler(){
+    private Handler handler2 = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case CONNECTION://联网
                     //弹出对话框
                     AlertDialog.Builder builder = new AlertDialog.Builder(AntiVirusActivity.this);
@@ -109,7 +111,7 @@ public class AntiVirusActivity extends AppCompatActivity {
                                 System.out.println(responseInfo.result + ">>>>>>>>>>>>>>>>>>>>");
                                 //拿到本地病毒库的版本号和服务器端的版本号并比较
                                 int myVersion = VirusDao.getVersion(getApplicationContext());
-                                int serverVersion = Integer.parseInt(responseInfo.result);
+                                final int serverVersion = Integer.parseInt(responseInfo.result);
                                 if (myVersion != serverVersion) {//表示有新病毒
                                     //弹出对话框提示用户
                                     AlertDialog.Builder builder = new AlertDialog.Builder(AntiVirusActivity.this);
@@ -119,11 +121,38 @@ public class AntiVirusActivity extends AppCompatActivity {
                                         public void onClick(DialogInterface dialog, int which) {
                                             //更新病毒
                                             HttpUtils utils1 = new HttpUtils();
-                                            utils1.send(HttpRequest.HttpMethod.GET, getResources().getString(R.string.getVirues),
+                                            utils1.send(HttpRequest.HttpMethod.GET, getResources().getString(R.string.newVirues),
                                                     new RequestCallBack<String>() {
                                                         @Override
                                                         public void onSuccess(ResponseInfo<String> responseInfo) {
                                                             //解析json数据，json数据存在responseInfo
+                                                            //                                                            singleVirus(responseInfo);
+                                                            System.out.println(responseInfo.result);
+
+                                                            JSONArray jArray = new JSONArray();
+                                                            List<VirusBean> beans = new ArrayList<VirusBean>();
+                                                            for (int i = 0; i < jArray.length(); i++) {
+                                                                try {
+                                                                    JSONObject json = (JSONObject) jArray.get(i);
+                                                                    VirusBean bean = new VirusBean();//把数据封装到bean中
+                                                                    bean.setDesc(json.getString("desc"));
+                                                                    bean.setName(json.getString("name"));
+                                                                    bean.setType(json.getInt("type"));
+                                                                    bean.setMd5(json.getString("md5"));
+                                                                    VirusDao.addVirus(AntiVirusActivity.this, bean);//更新一个病毒
+                                                                    beans.add(bean);
+
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                            //更新病毒库的  版本号
+                                                            VirusDao.addAllVirus(getApplicationContext(),beans);
+                                                            VirusDao.updateVersion(getApplicationContext(), serverVersion + "");
+                                                            scan();
+                                                        }
+
+                                                        private void singleVirus(ResponseInfo<String> responseInfo) {
                                                             try {
                                                                 JSONObject json = new JSONObject(responseInfo.result);
                                                                 VirusBean bean = new VirusBean();//把数据封装到bean中
@@ -132,17 +161,17 @@ public class AntiVirusActivity extends AppCompatActivity {
                                                                 bean.setType(json.getInt("type"));
                                                                 bean.setMd5(json.getString("md5"));
                                                                 VirusDao.addVirus(AntiVirusActivity.this, bean);//更新一个病毒
-
+                                                                //更新病毒库的  版本号
+                                                                VirusDao.updateVersion(getApplicationContext(), serverVersion + "");
                                                             } catch (JSONException e) {
                                                                 e.printStackTrace();
                                                             }
-                                                            ShowToast.show(AntiVirusActivity.this,"病毒库更新成功");
-                                                            scan();
+                                                            ShowToast.show(AntiVirusActivity.this, "病毒库更新成功");
                                                         }
 
                                                         @Override
                                                         public void onFailure(HttpException e, String s) {
-                                                            ShowToast.show(AntiVirusActivity.this,"病毒库更新失败");
+                                                            ShowToast.show(AntiVirusActivity.this, "病毒库更新失败");
                                                             //scan();
                                                         }
                                                     });
@@ -252,7 +281,7 @@ public class AntiVirusActivity extends AppCompatActivity {
                     }
                     String path = appbean.getPath();//拿到apk的安装路径
                     String desc = VirusDao.isVirus(getApplicationContext(), new File(path));
-                    System.out.println(Md5Utils.getFileMd5(new File(path))+":"+appbean.getName());
+                    System.out.println(Md5Utils.getFileMd5(new File(path)) + ":" + appbean.getName());
                     Data data = new Data();
                     data.desc = desc;
                     data.name = appbean.getName();

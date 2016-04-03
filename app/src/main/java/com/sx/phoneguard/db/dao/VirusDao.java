@@ -18,17 +18,31 @@ import java.util.List;
 public class VirusDao {
 
     /**
+     * 更新病毒库的版本号
      *
+     * @param context 上下文
+     * @param version 新的病毒库版本号
+     */
+    public static void updateVersion(Context context, String version) {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(context.getFilesDir() + "/antivirus.db", null,
+                SQLiteDatabase.OPEN_READWRITE);
+        ContentValues values = new ContentValues();
+        values.put("subcnt", version);
+        db.update("version", values, null, null);
+        db.close();
+    }
+
+    /**
      * @param context 上下文
      * @return 获取病毒库的版本号
      */
-    public static int getVersion(Context context){
+    public static int getVersion(Context context) {
         int version = 0;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(context.getFilesDir() +
                 "/antivirus.db", null, SQLiteDatabase.OPEN_READONLY);
         //select desc from datable where md5="92ee1ffff4987bec15108151f73dfe33";
         Cursor cursor = db.rawQuery("select subcnt from version ", null);
-        if (cursor.moveToNext()){//说明查到了数据
+        if (cursor.moveToNext()) {//说明查到了数据
             version = cursor.getInt(0);
         }
         db.close();
@@ -40,17 +54,18 @@ public class VirusDao {
 
     /**
      * 保存新的病毒到数据库
+     *
      * @param context 上下文
-     * @param bean 病毒的bean
+     * @param bean    病毒的bean
      */
-    public static void addVirus(Context context, VirusBean bean){
+    public static void addVirus(Context context, VirusBean bean) {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(context.getFilesDir() +
                 "/antivirus.db", null, SQLiteDatabase.OPEN_READWRITE);
         ContentValues values = new ContentValues();
-        values.put("md5",bean.getMd5());
-        values.put("desc",bean.getDesc());
-        values.put("type",bean.getType());
-        values.put("name",bean.getName());
+        values.put("md5", bean.getMd5());
+        values.put("desc", bean.getDesc());
+        values.put("type", bean.getType());
+        values.put("name", bean.getName());
 
         db.insert("datable", null, values);
         db.close();
@@ -58,10 +73,11 @@ public class VirusDao {
 
     /**
      * 保存新的多个病毒到数据库
+     *
      * @param context 上下文
-     * @param beans 病毒的bean
+     * @param beans   病毒的bean
      */
-    public static void addAllVirus(Context context, List<VirusBean> beans){
+    public static void addAllVirus(Context context, List<VirusBean> beans) {
         for (VirusBean b :
                 beans) {
             addVirus(context, b);
@@ -81,7 +97,7 @@ public class VirusDao {
         //select desc from datable where md5="92ee1ffff4987bec15108151f73dfe33";
         Cursor cursor = db.rawQuery("select desc from datable where md5 = ? ",
                 new String[]{Md5Utils.getFileMd5(file)});
-        if (cursor.moveToNext()){//说明查到了数据
+        if (cursor.moveToNext()) {//说明查到了数据
             res = cursor.getString(0);
         }
         db.close();
