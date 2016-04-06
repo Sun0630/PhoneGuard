@@ -140,4 +140,10 @@ public class AToolsActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    public void chouti(View view) {
+        Intent intent = new Intent(this,ChouTiActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

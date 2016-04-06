@@ -54,6 +54,7 @@ public class AntiVirusActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int i = 4/0;
         initView();
         checkVersion();
         //scan();//扫描病毒

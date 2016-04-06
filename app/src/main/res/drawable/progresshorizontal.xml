@@ -27,6 +27,7 @@
     <item android:id="@android:id/progress" android:drawable="@drawable/security_progress">
 
     </item>
-    
+
+
 </layer-list>
 

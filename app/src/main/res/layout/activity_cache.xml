@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sx.phoneguard.activities.CacheActivity">
+
+    <TextView
+        android:text="缓存清理"
+        style="@style/titleStyle"/>
+
+    <FrameLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll_cache_view"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:text="asdfllklasdfjl"
+                android:id="@+id/tv_cache_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/ll_cache_datas"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            style="@style/myCicleProgressBar"
+            android:layout_gravity="center"
+            android:id="@+id/pb_cache_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tv_cache_nocache"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="没有缓存数据哟~"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+    </FrameLayout>
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/bt_cache_clearAll"
+        android:text="清除所有缓存"
+        android:onClick="clearAll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

@@ -96,6 +96,26 @@
             android:text="短信还原"
             />
     </LinearLayout>
+
+    <LinearLayout
+        style="@style/contentStyle"
+        android:background="@drawable/list_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:onClick="chouti"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/star_big_on"/>
+
+        <TextView
+            style="@style/contentStyle"
+            android:text="抽屉菜单"
+            />
+    </LinearLayout>
+
     <ProgressBar
         android:id="@+id/pb_smsresume_progress"
         style="?android:attr/progressBarStyleHorizontal"

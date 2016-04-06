@@ -44,6 +44,9 @@ public class WatchDogInputPassActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)){
                 //处理home键的事件
+//                ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+//                am.killBackgroundProcesses(packname);
+                finish();
                 System.out.println(intent.getStringExtra("reason")+">>>>>>>>>>>>>>>>>>>>>>");
             }
         }

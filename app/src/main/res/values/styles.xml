@@ -45,7 +45,11 @@
     </style>
     
     <style name="myProShuiping" parent="@android:style/Widget.ProgressBar.Horizontal">
-        <item name="android:progressDrawable">@drawable/progresshorizontal     </item>
+        <item name="android:progressDrawable">@drawable/progresshorizontal   </item>
     </style>
-    
+
+
+    <style name="myCicleProgressBar" parent="@android:style/Widget.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/progress_medium_white</item>
+    </style>
 </resources>

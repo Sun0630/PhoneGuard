@@ -16,13 +16,15 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.startapp.android.publish.StartAppAd;
+import com.startapp.android.publish.StartAppSDK;
 import com.sx.phoneguard.R;
 import com.sx.phoneguard.utils.Md5Utils;
 import com.sx.phoneguard.utils.MyConstants;
 import com.sx.phoneguard.utils.ShowToast;
 
 public class HomeActivity extends AppCompatActivity {
-
+    private StartAppAd startAppAd = new StartAppAd(this);
     private GridView gv_jiugongge;
     private GVAdapter adapter;
     private SharedPreferences sp;
@@ -32,10 +34,20 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sp = getSharedPreferences(MyConstants.SPNAME, MODE_PRIVATE);
+        StartAppSDK.init(this, "202885025", "true");
+        startAppAd.showAd(); // show the ad
+        startAppAd.loadAd(); // load the next ad
         initView();//初始化界面
         initData();//初始化数据
         initEvent();//所有组件的初始化事件
     }
+
+    @Override
+    public void onBackPressed() {
+        startAppAd.onBackPressed();
+        super.onBackPressed();
+    }
+
 
     /**
      * 判断是否设置过密码
@@ -194,9 +206,17 @@ public class HomeActivity extends AppCompatActivity {
                         Intent intent3 = new Intent(HomeActivity.this, TaskManagerActivity.class);
                         startActivity(intent3);
                         break;
-                    case 5://手机杀毒
-                        Intent intent4 = new Intent(HomeActivity.this, AntiVirusActivity.class);
+                    case 4://进程管理
+                        Intent intent4 = new Intent(HomeActivity.this, TranficActivity.class);
                         startActivity(intent4);
+                        break;
+                    case 5://手机杀毒
+                        Intent intent5 = new Intent(HomeActivity.this, AntiVirusActivity.class);
+                        startActivity(intent5);
+                        break;
+                    case 6://手机杀毒
+                        Intent intent6 = new Intent(HomeActivity.this, CacheActivity.class);
+                        startActivity(intent6);
                         break;
                     case 7://高级工具
                         Intent intent7 = new Intent(HomeActivity.this, AToolsActivity.class);

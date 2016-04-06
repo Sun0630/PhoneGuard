@@ -19,6 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <com.startapp.android.publish.banner.Banner
+        android:id="@+id/startAppBanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
     <GridView
         android:listSelector="@drawable/list_selector"
         android:id="@+id/gv_home_jiugongge"
